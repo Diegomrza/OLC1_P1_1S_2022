@@ -1,5 +1,7 @@
 package analizadores;
 import java_cup.runtime.*;
+import java.util.ArrayList;
+
 
 parser code 
 {:
@@ -72,7 +74,8 @@ expresion ::=
     | error
 ;
 
-conjunto ::= CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR notacion:b PUNTOYCOMA {: System.out.println("CONJ, "+ a +", Rango: "+ b); :}
+conjunto ::= CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR notacion:b PUNTOYCOMA {: System.out.println("CONJ, "+ a +", Rango: "+ b); 
+                                                                                Proyecto1_Compi.Menu.conjuntos.insertar("Nombre: "+a+" rango: "+b); :}
     | error PUNTOYCOMA
 ;
 
@@ -81,17 +84,20 @@ notacion ::= IDENTIFICADOR:i VIRGULILLA IDENTIFICADOR:j     {: RESULT = i+" "+j;
     | NOTACION: i                                           {: RESULT = i;:}
 ;
 
-expregular ::= IDENTIFICADOR:a GUION MAYOR POLACA:b PUNTOYCOMA {: System.out.println("EXP: "+ a +", exp: "+ b); :}  
+expregular ::= IDENTIFICADOR:a GUION MAYOR POLACA:b PUNTOYCOMA {: System.out.println("EXP: "+ a +", exp: "+ b); 
+                                                                Proyecto1_Compi.Menu.expRegulares.insertar("Nombre: "+a+" exp: "+b); :}  
 ;
 
-evaluar ::= IDENTIFICADOR:a DOSPUNTOS LEXEMA:b PUNTOYCOMA evaluar   {: System.out.println("EVALUAR, "+a+", lexema: "+b); :}
-    | IDENTIFICADOR:a DOSPUNTOS LEXEMA:b PUNTOYCOMA                 {: System.out.println("EVALUAR, "+a+", lexema: "+b); :}
+evaluar ::= IDENTIFICADOR:a DOSPUNTOS LEXEMA:b PUNTOYCOMA evaluar   {: System.out.println("EVALUAR, "+a+", lexema: "+b); 
+                                                                    Proyecto1_Compi.Menu.cadenasEntrada.insertar("Nombre: "+a+" cadena: "+b); :}
+    | IDENTIFICADOR:a DOSPUNTOS LEXEMA:b PUNTOYCOMA                 {: System.out.println("EVALUAR, "+a+", lexema: "+b); 
+                                                                    Proyecto1_Compi.Menu.cadenasEntrada.insertar("Nombre: "+a+" cadena: "+b); :}
     | coment evaluar
     | conjunto evaluar
     | conjunto
 ;
 
-coment ::= COMMENT:a        {: System.out.println("Comentario: " + a); :}
+coment ::= COMMENT:a        {: System.out.println("Comentario: " + a); Proyecto1_Compi.Menu.comentarios.insertar(a); :}
 ;
 
 

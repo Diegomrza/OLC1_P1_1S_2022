@@ -10,19 +10,19 @@ package Estructuras;
  */
 public class NodoSimple {
 
-    private int valor;
+    private String valor;
     private NodoSimple siguiente;
 
-    public NodoSimple(int valor) {
+    public NodoSimple(String valor) {
         this.siguiente = null;
         this.valor = valor;
     }
 
-    public int getValor() {
+    public String getValor() {
         return valor;
     }
 
-    public void setValor(int valor) {
+    public void setValor(String valor) {
         this.valor = valor;
     }
 

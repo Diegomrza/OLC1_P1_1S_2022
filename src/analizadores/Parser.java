@@ -6,6 +6,7 @@
 package analizadores;
 
 import java_cup.runtime.*;
+import java.util.ArrayList;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -339,6 +340,7 @@ class CUP$Parser$actions {
 		int bright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Object b = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 System.out.println("CONJ, "+ a +", Rango: "+ b); 
+                                                                                Proyecto1_Compi.Menu.conjuntos.insertar("Nombre: "+a+" rango: "+b); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("conjunto",4, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-6)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -405,6 +407,7 @@ class CUP$Parser$actions {
 		int bright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		String b = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 System.out.println("EXP: "+ a +", exp: "+ b); 
+                                                                Proyecto1_Compi.Menu.expRegulares.insertar("Nombre: "+a+" exp: "+b); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("expregular",6, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -420,6 +423,7 @@ class CUP$Parser$actions {
 		int bright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		String b = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
 		 System.out.println("EVALUAR, "+a+", lexema: "+b); 
+                                                                    Proyecto1_Compi.Menu.cadenasEntrada.insertar("Nombre: "+a+" cadena: "+b); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("evaluar",7, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -435,6 +439,7 @@ class CUP$Parser$actions {
 		int bright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		String b = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 System.out.println("EVALUAR, "+a+", lexema: "+b); 
+                                                                    Proyecto1_Compi.Menu.cadenasEntrada.insertar("Nombre: "+a+" cadena: "+b); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("evaluar",7, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -473,7 +478,7 @@ class CUP$Parser$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 System.out.println("Comentario: " + a); 
+		 System.out.println("Comentario: " + a); Proyecto1_Compi.Menu.comentarios.insertar(a); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("coment",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;

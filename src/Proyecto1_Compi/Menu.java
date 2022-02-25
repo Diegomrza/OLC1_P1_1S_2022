@@ -4,6 +4,7 @@
  */
 package Proyecto1_Compi;
 
+import Estructuras.ListaSimple;
 import analizadores.Lector;
 import analizadores.Parser;
 import java.io.BufferedReader;
@@ -12,7 +13,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.StringReader;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -28,6 +28,11 @@ public class Menu extends javax.swing.JFrame {
      * Creates new form Menu
      */
     private String nombreArchivo = "";
+
+    public static ListaSimple comentarios = new ListaSimple();
+    public static ListaSimple expRegulares = new ListaSimple();
+    public static ListaSimple conjuntos = new ListaSimple();
+    public static ListaSimple cadenasEntrada = new ListaSimple();
 
     public Menu() {
         initComponents();
@@ -259,6 +264,15 @@ public class Menu extends javax.swing.JFrame {
                 String texto = leerArchivo(ruta);       //Obtenemos el texto del archivo
                 jTextArea1.setText(texto);              //Lo seteamos en el textArea 1
                 analizar(texto);                        //Lo mandamos a analizar con jFlex y Cup
+
+                System.out.println("\u001B[31m" + "\n\nComentarios: " + "\u001B[0m");
+                comentarios.mostrar();
+                System.out.println("\u001B[31m" + "\n\nConjuntos: " + "\u001B[0m");
+                conjuntos.mostrar();
+                System.out.println("\u001B[31m" + "\n\nCadenas entrada: " + "\u001B[0m");
+                cadenasEntrada.mostrar();
+                System.out.println("\u001B[31m" + "\n\nCExpresiones regulares: " + "\u001B[0m");
+                expRegulares.mostrar();
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, e);                  //En caso de haber un error lo mostramos
             }
