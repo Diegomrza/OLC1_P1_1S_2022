@@ -3,14 +3,32 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Proyecto1_Compi;
+
+import analizadores.Lector;
+import analizadores.Parser;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  *
  * @author Squery
  */
 public class Menu extends javax.swing.JFrame {
+
     /**
      * Creates new form Menu
      */
+    private String nombreArchivo = "";
+
     public Menu() {
         initComponents();
     }
@@ -50,7 +68,12 @@ public class Menu extends javax.swing.JFrame {
 
         Archivo.setBackground(new java.awt.Color(255, 255, 255));
         Archivo.setForeground(new java.awt.Color(0, 0, 0));
-        Archivo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Abrir", "Guardar", "Guardar como...", "Generar XML de salida" }));
+        Archivo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nuevo archivo", "Abrir archivo", "Guardar archivo", "Guardar como...", "Generar XML de salida" }));
+        Archivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                opcionesArchivos(evt);
+            }
+        });
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
@@ -60,7 +83,6 @@ public class Menu extends javax.swing.JFrame {
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Entradade texto");
         jScrollPane1.setViewportView(jTextArea1);
 
         jButton3.setText("Generar autómatas");
@@ -76,7 +98,6 @@ public class Menu extends javax.swing.JFrame {
         jTextArea2.setColumns(20);
         jTextArea2.setForeground(new java.awt.Color(0, 0, 0));
         jTextArea2.setRows(5);
-        jTextArea2.setText("Salida de texto");
         jScrollPane2.setViewportView(jTextArea2);
 
         jButton2.setText("Siguiente");
@@ -185,6 +206,96 @@ public class Menu extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private String leerArchivo(String rutaArchivo) throws IOException {
+        //Scanner entrada = new Scanner(System.in);
+        //System.out.println("Ingrese una ruta de archivo: ");
+
+        String textoFinal = "";
+        //String rutaArchivo = entrada.nextLine();
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(rutaArchivo));
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                textoFinal += linea + "\n";
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        } finally {
+            if (br != null) {
+                br.close();
+            }
+        }
+        return textoFinal;
+    }
+
+    private void opcionesArchivos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionesArchivos
+        // TODO add your handling code here:
+        JFileChooser fc = new JFileChooser();
+        if ("Nuevo archivo".equals(Archivo.getSelectedItem())) {
+
+        } else if ("Abrir archivo".equals(Archivo.getSelectedItem())) {
+            abrirArchivo(fc); //Método para abrir y obtener el contenido de un archivo
+        } else if ("Guardar archivo".equals(Archivo.getSelectedItem())) {
+            String contenido = jTextArea1.getText(); //Obtenemos el contenido del textArea1 
+            crearTexto(contenido);                   //Se lo guardamos al archivo actual
+        } else if ("Guardar como...".equals(Archivo.getSelectedItem())) {
+            jTextArea2.setText("Archivo guardado con exito");
+        } else if ("Generar XML de salida".equals(Archivo.getSelectedItem())) {
+            jTextArea2.setText("Archivo generado con exito");
+        }
+    }//GEN-LAST:event_opcionesArchivos
+
+    private void abrirArchivo(JFileChooser fc) {
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos exp", "exp"); //Para que se puedan seleccionar solo archivos con cierta extensión.
+        fc.setFileFilter(filter); //Agregamos el filtro al filechooser
+        int respuesta = fc.showOpenDialog(this);
+        if (respuesta == JFileChooser.APPROVE_OPTION) { //Comprobar si se ha pulsado Aceptar
+            File archivoElegido = fc.getSelectedFile(); //Crear un objeto File con el archivo elegido
+            try {
+                String ruta = archivoElegido.toString();//Obtenemos la ruta y la parseamos a String
+                nombreArchivo = ruta;                   //Guardamos la ruta en la variable global nombreArchivo para utilizarla en otros casos
+                String texto = leerArchivo(ruta);       //Obtenemos el texto del archivo
+                jTextArea1.setText(texto);              //Lo seteamos en el textArea 1
+                analizar(texto);                        //Lo mandamos a analizar con jFlex y Cup
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, e);                  //En caso de haber un error lo mostramos
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No se seleccionó ningún archivo. ");
+        }
+    }
+
+    public void crearTexto(String texto) {
+        FileWriter flwriter = null;
+        try {
+            flwriter = new FileWriter(nombreArchivo);
+            BufferedWriter bfwriter = new BufferedWriter(flwriter);
+            bfwriter.write(texto);
+            bfwriter.close();
+            JOptionPane.showMessageDialog(null, "Archivo guardado satisfactoriamente!");
+        } catch (IOException e) {
+            System.out.println("Error al intentar escribir en el archivo " + e);
+        } finally {
+            if (flwriter != null) {
+                try {
+                    flwriter.close();
+                } catch (IOException e) {
+                    System.out.println("Error al cerrar el flujo principal del archivo...");
+                }
+            }
+        }
+    }
+
+    private void analizar(String text) {
+        try {
+            Lector scanner = new Lector(new BufferedReader(new StringReader(text)));
+            Parser parser = new Parser(scanner);
+            parser.parse();
+        } catch (Exception e) {
+        }
+    }
 
     /**
      * @param args the command line arguments

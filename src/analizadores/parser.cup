@@ -1,0 +1,113 @@
+package analizadores;
+import java_cup.runtime.*;
+
+parser code 
+{:
+	/*Method that is called when parser can be recovered*/
+	public void syntax_error(Symbol s){ 
+            System.out.println("\u001B[31m" + "Error sintactico: " +s.value+"\u001B[0m"); 
+            //Instruction.lista.addError(new Error_("Sintactico error: "+s.value, "Sintactico"));
+                
+    }
+
+	/*Method that is called when parser can't be recovered*/
+	public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+            System.out.println("\u001B[31m"+"Error sintactico uncovered: " +s.value+"\u001B[0m"); 
+            //Instruction.lista.addError(new Error_("Sintactico error: "+s.value, "Sintactico"));
+        
+//System.err.println();
+    } 
+:}
+
+
+terminal String LLAVELEFT, LLAVERIGHT;
+terminal String COMMENT;
+terminal String PUNTOYCOMA;
+terminal String GUION;
+terminal String MAYOR;
+terminal String DOSPUNTOS;
+terminal String VIRGULILLA;
+terminal String CONJ;
+
+terminal String NUMERO;
+terminal String IDENTIFICADOR;
+terminal String CAMBIO;
+terminal String LEXEMA;
+terminal String POLACA;
+terminal String NOTACION;
+//terminal SALTODELINEA;
+//terminal WHITE;
+
+
+non terminal ini;
+non terminal instrucciones;
+non terminal instruccion;
+non terminal expresion;
+non terminal conjunto;
+non terminal notacion;
+non terminal expregular;
+non terminal evaluar;
+non terminal coment;
+
+start with ini; 
+
+ini ::= instrucciones;
+
+
+instrucciones ::= instruccion instrucciones
+    | instruccion 
+    | error instrucciones
+;
+               
+instruccion ::= LLAVELEFT expresion:a CAMBIO:b evaluar LLAVERIGHT   {: System.out.println("cambio de seccion, "+b); :}
+    | coment
+;
+
+expresion ::= 
+      conjunto:a expresion      {:RESULT = a;:}
+    | conjunto:a                {:RESULT = a;:}
+    | expregular:a expresion    {:RESULT = a;:} 
+    | expregular:a              {:RESULT = a;:} 
+    | coment expresion
+    | error
+;
+
+conjunto ::= CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR notacion:b PUNTOYCOMA {: System.out.println("CONJ, "+ a +", Rango: "+ b); :}
+    | error PUNTOYCOMA
+;
+
+notacion ::= IDENTIFICADOR:i VIRGULILLA IDENTIFICADOR:j     {: RESULT = i+" "+j; :}
+    | NUMERO:i VIRGULILLA NUMERO:j                          {: RESULT = i+" "+j;  :}
+    | NOTACION: i                                           {: RESULT = i;:}
+;
+
+expregular ::= IDENTIFICADOR:a GUION MAYOR POLACA:b PUNTOYCOMA {: System.out.println("EXP: "+ a +", exp: "+ b); :}  
+;
+
+evaluar ::= IDENTIFICADOR:a DOSPUNTOS LEXEMA:b PUNTOYCOMA evaluar   {: System.out.println("EVALUAR, "+a+", lexema: "+b); :}
+    | IDENTIFICADOR:a DOSPUNTOS LEXEMA:b PUNTOYCOMA                 {: System.out.println("EVALUAR, "+a+", lexema: "+b); :}
+    | coment evaluar
+    | conjunto evaluar
+    | conjunto
+;
+
+coment ::= COMMENT:a        {: System.out.println("Comentario: " + a); :}
+;
+
+
+/*
+coment ::= COMMENT:a {: System.out.println("Result: " + a); :} 
+;
+id ::= IDENTIFICADOR:a {: System.out.println("identificador: "+a); :}
+;
+num ::= NUMERO:a {: System.out.println("numero: "+a); :}
+;
+regulares ::= IDENTIFICADOR FLECHA prefijo:a {:System.out.println("Result: " + a);:}
+;
+prefijo ::= LETRAS prefijo:a {:System.out.println("Result: " + a);:} 
+    | LETRAS PUNTOYCOMA
+;
+evaluar ::= IDENTIFICADOR DOSPUNTOS PALABRAS PUNTOYCOMA evaluar:a {:System.out.println("Result: " + a);:}
+    | error PUNTOYCOMA
+;
+*/
