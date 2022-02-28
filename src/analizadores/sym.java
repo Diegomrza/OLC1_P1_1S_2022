@@ -8,41 +8,47 @@ package analizadores;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int CAMBIO = 13;
-  public static final int DOSPUNTOS = 8;
-  public static final int VIRGULILLA = 9;
-  public static final int CONJ = 10;
+  public static final int GUION = 15;
+  public static final int POLACA = 8;
+  public static final int PUNTOYCOMA = 13;
+  public static final int DOSPUNTOS = 17;
+  public static final int CADENA = 9;
+  public static final int CAMBIOSECCION = 14;
+  public static final int ONDULADO = 18;
+  public static final int LLAVERIGHT = 12;
+  public static final int NOTACIONCOMAS = 7;
+  public static final int MAYOR = 16;
   public static final int EOF = 0;
-  public static final int NOTACION = 16;
-  public static final int NUMERO = 11;
-  public static final int MAYOR = 7;
-  public static final int GUION = 6;
+  public static final int CONJ = 19;
+  public static final int COMMENT = 2;
+  public static final int SIMBOLO = 10;
   public static final int error = 1;
-  public static final int LEXEMA = 14;
-  public static final int PUNTOYCOMA = 5;
-  public static final int LLAVERIGHT = 3;
-  public static final int POLACA = 15;
-  public static final int COMMENT = 4;
-  public static final int IDENTIFICADOR = 12;
-  public static final int LLAVELEFT = 2;
+  public static final int NUMERO = 4;
+  public static final int IDENTIFICADOR = 3;
+  public static final int AZMAYUS = 6;
+  public static final int LLAVELEFT = 11;
+  public static final int AZMINUS = 5;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
+  "COMMENT",
+  "IDENTIFICADOR",
+  "NUMERO",
+  "AZMINUS",
+  "AZMAYUS",
+  "NOTACIONCOMAS",
+  "POLACA",
+  "CADENA",
+  "SIMBOLO",
   "LLAVELEFT",
   "LLAVERIGHT",
-  "COMMENT",
   "PUNTOYCOMA",
+  "CAMBIOSECCION",
   "GUION",
   "MAYOR",
   "DOSPUNTOS",
-  "VIRGULILLA",
-  "CONJ",
-  "NUMERO",
-  "IDENTIFICADOR",
-  "CAMBIO",
-  "LEXEMA",
-  "POLACA",
-  "NOTACION"
+  "ONDULADO",
+  "CONJ"
   };
 }
 

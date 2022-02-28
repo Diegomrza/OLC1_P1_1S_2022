@@ -241,7 +241,12 @@ public class Menu extends javax.swing.JFrame {
         if ("Nuevo archivo".equals(Archivo.getSelectedItem())) {
 
         } else if ("Abrir archivo".equals(Archivo.getSelectedItem())) {
+            comentarios.delete();
+            expRegulares.delete();
+            conjuntos.delete();
+            cadenasEntrada.delete();
             abrirArchivo(fc); //Método para abrir y obtener el contenido de un archivo
+
         } else if ("Guardar archivo".equals(Archivo.getSelectedItem())) {
             String contenido = jTextArea1.getText(); //Obtenemos el contenido del textArea1 
             crearTexto(contenido);                   //Se lo guardamos al archivo actual

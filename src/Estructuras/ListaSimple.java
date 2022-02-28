@@ -20,6 +20,10 @@ public class ListaSimple {
         return primero;
     }
 
+    public void delete() {
+        this.primero = null;
+    }
+
     public void insertar(String valor) {
         NodoSimple nodo = new NodoSimple(valor);
         if (this.primero == null) {
@@ -38,7 +42,6 @@ public class ListaSimple {
         while (aux != null) {
             System.out.println("Valor: " + aux.getValor());
             aux = aux.getSiguiente();
-            System.out.println("");
         }
     }
 }
