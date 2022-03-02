@@ -8,23 +8,29 @@ package analizadores;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
+  public static final int PUNTO = 23;
+  public static final int SALTODELINEA = 20;
   public static final int GUION = 15;
-  public static final int POLACA = 8;
   public static final int PUNTOYCOMA = 13;
   public static final int DOSPUNTOS = 17;
-  public static final int CADENA = 9;
+  public static final int CADENA = 8;
+  public static final int OR = 25;
   public static final int CAMBIOSECCION = 14;
   public static final int ONDULADO = 18;
   public static final int LLAVERIGHT = 12;
+  public static final int TKESPECIALES = 10;
   public static final int NOTACIONCOMAS = 7;
   public static final int MAYOR = 16;
   public static final int EOF = 0;
   public static final int CONJ = 19;
   public static final int COMMENT = 2;
-  public static final int SIMBOLO = 10;
+  public static final int SIMBOLO = 9;
   public static final int error = 1;
   public static final int NUMERO = 4;
+  public static final int CERRKLEE = 21;
   public static final int IDENTIFICADOR = 3;
+  public static final int PREGUNTA = 24;
+  public static final int CERRPOSI = 22;
   public static final int AZMAYUS = 6;
   public static final int LLAVELEFT = 11;
   public static final int AZMINUS = 5;
@@ -37,9 +43,9 @@ public class sym {
   "AZMINUS",
   "AZMAYUS",
   "NOTACIONCOMAS",
-  "POLACA",
   "CADENA",
   "SIMBOLO",
+  "TKESPECIALES",
   "LLAVELEFT",
   "LLAVERIGHT",
   "PUNTOYCOMA",
@@ -48,7 +54,13 @@ public class sym {
   "MAYOR",
   "DOSPUNTOS",
   "ONDULADO",
-  "CONJ"
+  "CONJ",
+  "SALTODELINEA",
+  "CERRKLEE",
+  "CERRPOSI",
+  "PUNTO",
+  "PREGUNTA",
+  "OR"
   };
 }
 

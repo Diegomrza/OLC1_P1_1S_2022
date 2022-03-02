@@ -1,21 +1,24 @@
 package analizadores;
 import java_cup.runtime.*;
 import java.util.ArrayList;
+import Proyecto1_Compi.Menu.*;
+import Estructuras.ArbolBinario;
+import Estructuras.NodoArbol;
 
 parser code 
 {:
 	/*Method that is called when parser can be recovered*/
 	public void syntax_error(Symbol s){ 
-            System.out.println("\u001B[31m" + "Error sintactico: " +s.value+"\u001B[0m"); 
+            System.out.println("\u001B[31m" + "Error sintactico: " +s.value+"\u001B[0m"+s.left+s.right); 
             //Instruction.lista.addError(new Error_("Sintactico error: "+s.value, "Sintactico"));
     }
 	/*Method that is called when parser can't be recovered*/
 	public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
-            System.out.println("\u001B[31m"+"Error sintactico uncovered: " +s.value+"\u001B[0m"); 
+            System.out.println("\u001B[31m"+"Error sintactico uncovered: " +s.value+"\u001B[0m"+s.left+s.right); 
             //Instruction.lista.addError(new Error_("Sintactico error: "+s.value, "Sintactico"));
     } 
 :}
-
+ 
 //Parte 1 terminales
 terminal String COMMENT;
 terminal String IDENTIFICADOR;
@@ -23,9 +26,12 @@ terminal String NUMERO;
 terminal String AZMINUS;
 terminal String AZMAYUS;
 terminal String NOTACIONCOMAS;
-terminal String POLACA;
+//terminal String POLACA;
 terminal String CADENA;
 terminal String SIMBOLO;
+
+terminal String TKESPECIALES;
+//terminal String SIMBOLOSESPECIALES;
 
 //Parte 2 terminales
 terminal String LLAVELEFT;
@@ -37,50 +43,79 @@ terminal String MAYOR;
 terminal String DOSPUNTOS;
 terminal String ONDULADO;
 terminal String CONJ;
-//terminal String SALTODELINEA;
+terminal String SALTODELINEA;
+
+terminal String CERRKLEE;
+terminal String CERRPOSI;
+terminal String PUNTO;
+terminal String PREGUNTA;
+terminal String OR;
 
 //No terminales
 non terminal inicio;
 non terminal expresion;
+non terminal expresion2;
 non terminal conjunto;
 non terminal regulares;
 non terminal evaluar;
 non terminal comentario;
+non terminal NodoArbol polaca;
 
 start with inicio; 
 
-inicio ::= LLAVELEFT expresion LLAVERIGHT inicio
-    | LLAVELEFT expresion LLAVERIGHT
-    | comentario inicio
-    | comentario
-    //| SALTODELINEA inicio
-    //| SALTODELINEA
+inicio ::= 
+    LLAVELEFT expresion CAMBIOSECCION expresion2 LLAVERIGHT 
+    |LLAVELEFT expresion CAMBIOSECCION expresion2 LLAVERIGHT inicio
+    |comentario inicio
+    |comentario
+    |SALTODELINEA inicio
+    |SALTODELINEA
 ;
 
-expresion ::= conjunto expresion
-    | conjunto
-    | regulares expresion
-    | regulares
-    | CAMBIOSECCION expresion
-    | evaluar expresion
-    | evaluar
-    | comentario expresion
-    //| SALTODELINEA expresion
-    //| SALTODELINEA 
+expresion ::= 
+    conjunto expresion
+    |conjunto
+    |regulares expresion
+    |regulares
+    |comentario expresion
+    |comentario
 ;
 
-comentario ::= COMMENT:a {: Proyecto1_Compi.Menu.comentarios.insertar(a); :} //System.out.println("Comentario: "+a);
+expresion2 ::= 
+    evaluar expresion2
+    |evaluar
+    |comentario expresion2
+    |comentario
 ;
 
-conjunto ::= CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR AZMINUS:b ONDULADO AZMINUS:c PUNTOYCOMA {: Proyecto1_Compi.Menu.conjuntos.insertar(a+": "+b+"-"+c); :} //System.out.println(a+" :-: " + b + " :-: "+c);
-    | CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR AZMAYUS:b ONDULADO AZMAYUS:c PUNTOYCOMA {: Proyecto1_Compi.Menu.conjuntos.insertar(a+": "+b+"-"+c); :} //System.out.println(a+" :-: " + b + " :-: "+c);
-    | CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR NUMERO:b ONDULADO NUMERO:c PUNTOYCOMA {: Proyecto1_Compi.Menu.conjuntos.insertar(a+": "+b+"-"+c); :} //System.out.println(a+" :-: " + b + " :-: "+c);
-    | CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR NOTACIONCOMAS:b PUNTOYCOMA {: Proyecto1_Compi.Menu.conjuntos.insertar(a+": "+b); :} //System.out.println(a+" :-: "+b);
-    | CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR SIMBOLO:b ONDULADO SIMBOLO:c PUNTOYCOMA {: Proyecto1_Compi.Menu.conjuntos.insertar(a+": "+b+"-"+c); :} //System.out.println(a+" :-: " + b + " :-: "+c);
+comentario ::= 
+    COMMENT //:a {: Proyecto1_Compi.Menu.elementos.insertar(a); :}System.out.println("Comentario: "+a);
 ;
 
-regulares ::= IDENTIFICADOR:a GUION MAYOR POLACA:b PUNTOYCOMA {: Proyecto1_Compi.Menu.expRegulares.insertar(a+": "+b); :} //System.out.println(a+" :-: "+b);
+conjunto ::= 
+     CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR AZMINUS:b ONDULADO AZMINUS:c PUNTOYCOMA {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
+    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR AZMAYUS:b ONDULADO AZMAYUS:c PUNTOYCOMA {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
+    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR NUMERO:b ONDULADO NUMERO:c PUNTOYCOMA {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
+    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR NOTACIONCOMAS:b PUNTOYCOMA {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b,"",""); :} //System.out.println(a+" :-: "+b);
+    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR SIMBOLO:b ONDULADO SIMBOLO:c PUNTOYCOMA {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
 ;
 
-evaluar ::= IDENTIFICADOR:a DOSPUNTOS CADENA:b PUNTOYCOMA {: Proyecto1_Compi.Menu.cadenasEntrada.insertar(a+": "+b); :} //System.out.println(a+" :-: "+b);
+regulares ::= 
+    IDENTIFICADOR:a GUION MAYOR polaca:b PUNTOYCOMA {: NodoArbol root = new NodoArbol(".",b,new NodoArbol("#", null, null)); ArbolBinario tree = new ArbolBinario(a, root); tree.generarGrafo(root); :}
+;
+
+evaluar ::=
+    IDENTIFICADOR:i DOSPUNTOS CADENA:j PUNTOYCOMA {: Proyecto1_Compi.Menu.elementos.insertar(i,"CADENA","","",j); :}
+;
+
+polaca ::= 
+    CERRKLEE polaca:a                           {: RESULT = new NodoArbol("*", a, null); :}
+    |CERRPOSI polaca:a                          {: RESULT = new NodoArbol("+", a, null); :}
+    |PREGUNTA polaca:a                          {: RESULT = new NodoArbol("?", a, null); :}
+    |PUNTO polaca:a polaca:b                    {: RESULT = new NodoArbol(".", a, b); :}
+    |OR polaca:a polaca:b                       {: RESULT = new NodoArbol("|", a, b); :}
+    |CADENA:a                                   {: a = a.replace("\"", ""); RESULT = new NodoArbol(a, null, null); :}
+    |LLAVELEFT IDENTIFICADOR:a LLAVERIGHT       {: RESULT = new NodoArbol(a, null, null); :}
+    |TKESPECIALES:a                             {: RESULT = new NodoArbol(a, null, null); :}
+    |SIMBOLO:a                                  {: RESULT = new NodoArbol(a, null, null); :}
 ;

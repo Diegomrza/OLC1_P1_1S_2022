@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Proyecto1_Compi;
 
 import Estructuras.ListaSimple;
@@ -29,10 +25,7 @@ public class Menu extends javax.swing.JFrame {
      */
     private String nombreArchivo = "";
 
-    public static ListaSimple comentarios = new ListaSimple();
-    public static ListaSimple expRegulares = new ListaSimple();
-    public static ListaSimple conjuntos = new ListaSimple();
-    public static ListaSimple cadenasEntrada = new ListaSimple();
+    public static ListaSimple elementos = new ListaSimple();
 
     public Menu() {
         initComponents();
@@ -62,7 +55,6 @@ public class Menu extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ExpAnalyzer");
@@ -122,12 +114,6 @@ public class Menu extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Nombre");
 
-        jLabel5.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel5.setFont(new java.awt.Font("Dialog", 0, 48)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Extra");
-
         javax.swing.GroupLayout PanelPrincipalLayout = new javax.swing.GroupLayout(PanelPrincipal);
         PanelPrincipal.setLayout(PanelPrincipalLayout);
         PanelPrincipalLayout.setHorizontalGroup(
@@ -138,6 +124,7 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(jScrollPane2)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelPrincipalLayout.createSequentialGroup()
                         .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -145,20 +132,17 @@ public class Menu extends javax.swing.JFrame {
                                 .addGroup(PanelPrincipalLayout.createSequentialGroup()
                                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(Archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(106, 106, 106)
                         .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
-                            .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(PanelPrincipalLayout.createSequentialGroup()
-                                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelPrincipalLayout.createSequentialGroup()
+                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(243, 243, 243)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(13, 13, 13))
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         PanelPrincipalLayout.setVerticalGroup(
@@ -166,32 +150,26 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(PanelPrincipalLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(Archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(10, 10, 10)
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16)
-                .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(PanelPrincipalLayout.createSequentialGroup()
-                        .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18))
-                    .addGroup(PanelPrincipalLayout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)))
+                .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -212,12 +190,28 @@ public class Menu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private String leerArchivo(String rutaArchivo) throws IOException {
-        //Scanner entrada = new Scanner(System.in);
-        //System.out.println("Ingrese una ruta de archivo: ");
+    private void opcionesArchivos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionesArchivos
+        // TODO add your handling code here:
+        JFileChooser fc = new JFileChooser();
+        if ("Nuevo archivo".equals(Archivo.getSelectedItem())) {
 
+        } else if ("Abrir archivo".equals(Archivo.getSelectedItem())) {
+            elementos.delete();
+            
+            abrirArchivo(fc); //Método para abrir y obtener el contenido de un archivo
+
+        } else if ("Guardar archivo".equals(Archivo.getSelectedItem())) {
+            String contenido = jTextArea1.getText(); //Obtenemos el contenido del textArea1
+            crearTexto(contenido);                   //Se lo guardamos al archivo actual
+        } else if ("Guardar como...".equals(Archivo.getSelectedItem())) {
+            jTextArea2.setText("Archivo guardado con exito");
+        } else if ("Generar XML de salida".equals(Archivo.getSelectedItem())) {
+            jTextArea2.setText("Archivo generado con exito");
+        }
+    }//GEN-LAST:event_opcionesArchivos
+
+    private String leerArchivo(String rutaArchivo) throws IOException {
         String textoFinal = "";
-        //String rutaArchivo = entrada.nextLine();
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(rutaArchivo));
@@ -235,28 +229,6 @@ public class Menu extends javax.swing.JFrame {
         return textoFinal;
     }
 
-    private void opcionesArchivos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionesArchivos
-        // TODO add your handling code here:
-        JFileChooser fc = new JFileChooser();
-        if ("Nuevo archivo".equals(Archivo.getSelectedItem())) {
-
-        } else if ("Abrir archivo".equals(Archivo.getSelectedItem())) {
-            comentarios.delete();
-            expRegulares.delete();
-            conjuntos.delete();
-            cadenasEntrada.delete();
-            abrirArchivo(fc); //Método para abrir y obtener el contenido de un archivo
-
-        } else if ("Guardar archivo".equals(Archivo.getSelectedItem())) {
-            String contenido = jTextArea1.getText(); //Obtenemos el contenido del textArea1 
-            crearTexto(contenido);                   //Se lo guardamos al archivo actual
-        } else if ("Guardar como...".equals(Archivo.getSelectedItem())) {
-            jTextArea2.setText("Archivo guardado con exito");
-        } else if ("Generar XML de salida".equals(Archivo.getSelectedItem())) {
-            jTextArea2.setText("Archivo generado con exito");
-        }
-    }//GEN-LAST:event_opcionesArchivos
-
     private void abrirArchivo(JFileChooser fc) {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos exp", "exp"); //Para que se puedan seleccionar solo archivos con cierta extensión.
         fc.setFileFilter(filter); //Agregamos el filtro al filechooser
@@ -267,17 +239,13 @@ public class Menu extends javax.swing.JFrame {
                 String ruta = archivoElegido.toString();//Obtenemos la ruta y la parseamos a String
                 nombreArchivo = ruta;                   //Guardamos la ruta en la variable global nombreArchivo para utilizarla en otros casos
                 String texto = leerArchivo(ruta);       //Obtenemos el texto del archivo
+                System.out.println(texto);
                 jTextArea1.setText(texto);              //Lo seteamos en el textArea 1
                 analizar(texto);                        //Lo mandamos a analizar con jFlex y Cup
 
-                System.out.println("\u001B[31m" + "\n\nComentarios: " + "\u001B[0m");
-                comentarios.mostrar();
-                System.out.println("\u001B[31m" + "\n\nConjuntos: " + "\u001B[0m");
-                conjuntos.mostrar();
-                System.out.println("\u001B[31m" + "\n\nCadenas entrada: " + "\u001B[0m");
-                cadenasEntrada.mostrar();
-                System.out.println("\u001B[31m" + "\n\nCExpresiones regulares: " + "\u001B[0m");
-                expRegulares.mostrar();
+                //System.out.println("\u001B[31m" + "\n\nComentarios: " + "\u001B[0m");
+                //elementos.mostrar();
+               
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, e);                  //En caso de haber un error lo mostramos
             }
@@ -363,7 +331,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
