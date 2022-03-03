@@ -9,12 +9,12 @@ parser code
 {:
 	/*Method that is called when parser can be recovered*/
 	public void syntax_error(Symbol s){ 
-            System.out.println("\u001B[31m" + "Error sintactico: " +s.value+"\u001B[0m"+s.left+s.right); 
+            System.out.println("\u001B[31m"+"Error sintactico en la linea "+s.left+" columna "+s.right+" No se esperaba este componente: "+s.value+"\u001B[0m"); 
             //Instruction.lista.addError(new Error_("Sintactico error: "+s.value, "Sintactico"));
     }
 	/*Method that is called when parser can't be recovered*/
 	public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
-            System.out.println("\u001B[31m"+"Error sintactico uncovered: " +s.value+"\u001B[0m"+s.left+s.right); 
+            System.out.println("\u001B[31m"+"Error sintactico uncovered en la linea "+s.left+" columna "+s.right+" No se esperaba este componente: "+s.value+"\u001B[0m"); 
             //Instruction.lista.addError(new Error_("Sintactico error: "+s.value, "Sintactico"));
     } 
 :}
@@ -73,19 +73,21 @@ inicio ::=
 ;
 
 expresion ::= 
-    conjunto expresion
-    |conjunto
-    |regulares expresion
-    |regulares
-    |comentario expresion
+    conjunto PUNTOYCOMA expresion
+    |conjunto PUNTOYCOMA
+    |regulares PUNTOYCOMA expresion
+    |regulares PUNTOYCOMA
+    |comentario expresion 
     |comentario
+    |error PUNTOYCOMA
 ;
 
 expresion2 ::= 
-    evaluar expresion2
-    |evaluar
+    evaluar PUNTOYCOMA expresion2 
+    |evaluar PUNTOYCOMA
     |comentario expresion2
     |comentario
+    |error PUNTOYCOMA
 ;
 
 comentario ::= 
@@ -93,19 +95,21 @@ comentario ::=
 ;
 
 conjunto ::= 
-     CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR AZMINUS:b ONDULADO AZMINUS:c PUNTOYCOMA {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
-    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR AZMAYUS:b ONDULADO AZMAYUS:c PUNTOYCOMA {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
-    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR NUMERO:b ONDULADO NUMERO:c PUNTOYCOMA {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
-    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR NOTACIONCOMAS:b PUNTOYCOMA {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b,"",""); :} //System.out.println(a+" :-: "+b);
-    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR SIMBOLO:b ONDULADO SIMBOLO:c PUNTOYCOMA {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
+     CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR AZMINUS:b ONDULADO AZMINUS:c  {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
+    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR AZMAYUS:b ONDULADO AZMAYUS:c  {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
+    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR NUMERO:b ONDULADO NUMERO:c  {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
+    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR NOTACIONCOMAS:b  {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b,"",""); :} //System.out.println(a+" :-: "+b);
+    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR SIMBOLO:b ONDULADO SIMBOLO:c  {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
 ;
 
 regulares ::= 
-    IDENTIFICADOR:a GUION MAYOR polaca:b PUNTOYCOMA {: NodoArbol root = new NodoArbol(".",b,new NodoArbol("#", null, null)); ArbolBinario tree = new ArbolBinario(a, root); tree.generarGrafo(root); :}
+    IDENTIFICADOR:a GUION MAYOR polaca:b  {:NodoArbol root = new NodoArbol(".", b, new NodoArbol("#", null, null)); 
+                                            ArbolBinario tree = new ArbolBinario(a, root);
+                                            Proyecto1_Compi.Menu.arboles.add(tree);:}
 ;
 
 evaluar ::=
-    IDENTIFICADOR:i DOSPUNTOS CADENA:j PUNTOYCOMA {: Proyecto1_Compi.Menu.elementos.insertar(i,"CADENA","","",j); :}
+    IDENTIFICADOR:i DOSPUNTOS CADENA:j  {: Proyecto1_Compi.Menu.elementos.insertar(i,"CADENA","","",j); :}
 ;
 
 polaca ::= 

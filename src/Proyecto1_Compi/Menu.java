@@ -1,5 +1,6 @@
 package Proyecto1_Compi;
 
+import Estructuras.ArbolBinario;
 import Estructuras.ListaSimple;
 import analizadores.Lector;
 import analizadores.Parser;
@@ -10,6 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -24,7 +26,7 @@ public class Menu extends javax.swing.JFrame {
      * Creates new form Menu
      */
     private String nombreArchivo = "";
-
+    public static ArrayList<ArbolBinario> arboles = new ArrayList<>();
     public static ListaSimple elementos = new ListaSimple();
 
     public Menu() {
@@ -83,6 +85,11 @@ public class Menu extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextArea1);
 
         jButton3.setText("Generar autómatas");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Analizar entradas");
 
@@ -197,7 +204,7 @@ public class Menu extends javax.swing.JFrame {
 
         } else if ("Abrir archivo".equals(Archivo.getSelectedItem())) {
             elementos.delete();
-            
+
             abrirArchivo(fc); //Método para abrir y obtener el contenido de un archivo
 
         } else if ("Guardar archivo".equals(Archivo.getSelectedItem())) {
@@ -209,6 +216,17 @@ public class Menu extends javax.swing.JFrame {
             jTextArea2.setText("Archivo generado con exito");
         }
     }//GEN-LAST:event_opcionesArchivos
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+
+        for (ArbolBinario i : arboles) {
+            i.inicio();
+            //i.generarGrafo(i.getRoot());
+            System.out.println("Arbol: ");
+            i.mostrar();
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     private String leerArchivo(String rutaArchivo) throws IOException {
         String textoFinal = "";
@@ -243,9 +261,9 @@ public class Menu extends javax.swing.JFrame {
                 jTextArea1.setText(texto);              //Lo seteamos en el textArea 1
                 analizar(texto);                        //Lo mandamos a analizar con jFlex y Cup
 
-                //System.out.println("\u001B[31m" + "\n\nComentarios: " + "\u001B[0m");
-                //elementos.mostrar();
-               
+                System.out.println("\u001B[31m" + "\n\nComentarios: " + "\u001B[0m");
+                elementos.mostrar();
+
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, e);                  //En caso de haber un error lo mostramos
             }
@@ -287,37 +305,37 @@ public class Menu extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Menu().setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new Menu().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> Archivo;

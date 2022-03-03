@@ -20,6 +20,7 @@ public class NodoArbol {
         this.valor = valor;
         this.izquierda = izquierda;
         this.derecha = derecha;
+        this.numero = -1;
     }
 
     public boolean isAnulable() {

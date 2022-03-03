@@ -10,13 +10,12 @@ import java_cup.runtime.Symbol;
 %unicode
 %ignorecase 
 
-
 %init{ 
    yyline = 1; 
-   yycolumn = 1;
+   yychar = 1;
 %init} 
 
-WHITE = [ \r\t\n]+
+WHITE = [ \r\t]+
 COMMENT = "<!"[^("!>")]+"!>"|\/\/.+
 IDENTIFICADOR = [a-zA-Z_][a-zA-Z0-9_]*
 NUMERO = [0-9]+
@@ -47,7 +46,7 @@ TKESPECIALES = (\\n|\\\'|\\\")
 "?" {return new Symbol(sym.PREGUNTA, yytext());}
 "|" {return new Symbol(sym.OR, yytext());}
 
-//\n {yychar=1;}
+\n {yychar = 1;}
 
 {WHITE} {}
 
@@ -63,5 +62,5 @@ TKESPECIALES = (\\n|\\\'|\\\")
 {CADENA} {return new Symbol(sym.CADENA, yytext());}
 
 . { 
-    System.out.println("\u001B[31m"+"Lexical error: "+yytext()+"\u001B[0m"+yyline+yycolumn);
+    System.out.println("\u001B[31m"+"Error lexico en: "+yytext()+" en la linea: "+yyline+ " en la columna: "+ yychar+ "\u001B[0m");
 }
