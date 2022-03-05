@@ -12,25 +12,6 @@ public class Proyecto1 {
         Menu nuevo = new Menu();
         nuevo.setVisible(true);
 
-//        String primerosi = "1";
-//        String primerosd = "4";
-//
-//        String primerosIzq[] = primerosi.split(",");
-//        String primerosDer[] = primerosd.split(",");
-//
-//        String PRIMEROS = "";
-//        for (int i = 0; i < primerosIzq.length; i++) {
-//                PRIMEROS += primerosIzq[i] + ",";
-//        }
-//        for (int j = 0; j < primerosDer.length; j++) {
-//            if (j < primerosDer.length - 1) {
-//                PRIMEROS += primerosDer[j] + ",";
-//            } else {
-//                PRIMEROS += primerosDer[j];
-//            }
-//
-//        }
-//        System.out.println(PRIMEROS);
 //        ArrayList<Object> lista = new ArrayList();
 //        lista.add(new NodoArbol("Diego", null, null));
 //        lista.add(new NodoArbol("Angel", null, null));

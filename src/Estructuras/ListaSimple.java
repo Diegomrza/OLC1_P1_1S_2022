@@ -4,6 +4,8 @@ package Estructuras;
  *
  * @author Squery
  */
+import Estructuras.Nodos.*;
+
 public class ListaSimple {
 
     private NodoSimple primero;
@@ -32,6 +34,22 @@ public class ListaSimple {
             }
             aux.setSiguiente(nodo);
         }
+    }
+
+    public void insertarNodoAceptacion() { //
+        NodoAceptacion nodo = new NodoAceptacion();
+    }
+
+    public void insertarSiguientes() { //
+        NodoSiguientes nodo = new NodoSiguientes();
+    }
+
+    public void insertarEstados() { //
+        //NodoEstado nodo = new NodoEstado();
+    }
+
+    public void insertarTerminales() { //
+        NodoTerminal nodo = new NodoTerminal();
     }
 
     public void mostrar() {

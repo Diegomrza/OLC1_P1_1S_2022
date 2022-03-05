@@ -224,7 +224,8 @@ public class Menu extends javax.swing.JFrame {
             i.inicio();
             //i.generarGrafo(i.getRoot());
             System.out.println("Arbol: ");
-            i.mostrar();
+            //i.mostrar();
+            i.imprimirTerminales();
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -261,9 +262,8 @@ public class Menu extends javax.swing.JFrame {
                 jTextArea1.setText(texto);              //Lo seteamos en el textArea 1
                 analizar(texto);                        //Lo mandamos a analizar con jFlex y Cup
 
-                System.out.println("\u001B[31m" + "\n\nComentarios: " + "\u001B[0m");
-                elementos.mostrar();
-
+                //System.out.println("\u001B[31m" + "\n\nComentarios: " + "\u001B[0m");
+                //elementos.mostrar();
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, e);                  //En caso de haber un error lo mostramos
             }

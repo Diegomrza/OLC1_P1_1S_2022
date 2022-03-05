@@ -14,7 +14,7 @@ public class NodoArbol {
     private int numero;
     private String primeros;
     private String ultimos;
-    private String siguientes;
+    private String siguientes[] = new String[2]; //Primera posición los nodos que apuntarán a los de la segunda posicion
 
     public NodoArbol(String valor, NodoArbol izquierda, NodoArbol derecha) {
         this.valor = valor;
@@ -55,11 +55,11 @@ public class NodoArbol {
         this.ultimos = ultimos;
     }
 
-    public String getSiguientes() {
+    public String[] getSiguientes() {
         return siguientes;
     }
 
-    public void setSiguientes(String siguientes) {
+    public void setSiguientes(String siguientes[]) {
         this.siguientes = siguientes;
     }
 
