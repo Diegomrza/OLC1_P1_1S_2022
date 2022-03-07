@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Estructuras.Nodos;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  *
@@ -13,22 +10,10 @@ import java.util.ArrayList;
 public class NodoEstado {
 
     private String nombre;
-    private ArrayList<Integer> numeros = new ArrayList();
+    private ArrayList<Integer> items = new ArrayList();
 
     public NodoEstado(String nombre) {
         this.nombre = nombre;
-    }
-
-    public void agregar(int numero) {
-        this.numeros.add(numero);
-    }
-
-    public void setNumero(ArrayList numeros) {
-        this.numeros = numeros;
-    }
-
-    public ArrayList getNumero() {
-        return this.numeros;
     }
 
     public void setNombre(String nombre) {
@@ -37,6 +22,36 @@ public class NodoEstado {
 
     public String getNombre() {
         return this.nombre;
+    }
+
+    public void setNumero(int numero) {
+        if (!this.items.isEmpty()) {
+            if (!existe(numero)) {
+                this.items.add(numero);
+                Collections.sort(this.items);
+            }
+        } else {
+            this.items.add(numero);
+        }
+
+    }
+
+    public ArrayList<Integer> getNumeros() {
+        return this.items;
+    }
+
+    public void setNumeros(ArrayList<Integer> numeros) {
+        this.items = numeros;
+    }
+
+    public boolean existe(int numero) {
+        boolean bandera = false;
+        for (int n : this.items) {
+            if (numero == n) {
+                bandera = true;
+            }
+        }
+        return bandera;
     }
 
 }

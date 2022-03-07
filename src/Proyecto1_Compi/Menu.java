@@ -223,9 +223,9 @@ public class Menu extends javax.swing.JFrame {
         for (ArbolBinario i : arboles) {
             i.inicio();
             //i.generarGrafo(i.getRoot());
-            System.out.println("Arbol: ");
+            //System.out.println("Arbol: ");
             //i.mostrar();
-            i.imprimirTerminales();
+            //i.imprimirTerminales();
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 

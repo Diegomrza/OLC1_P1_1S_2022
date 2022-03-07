@@ -1,10 +1,7 @@
 package Proyecto1_Compi;
 
-import Estructuras.ArbolBinario;
-import Estructuras.ListaSimple;
-import Estructuras.NodoArbol;
-import java.util.ArrayList;
-import java.util.Collections;
+import Estructuras.Nodos.NodoEstado;
+import java.util.*;
 
 public class Proyecto1 {
 
@@ -12,37 +9,65 @@ public class Proyecto1 {
         Menu nuevo = new Menu();
         nuevo.setVisible(true);
 
-//        ArrayList<Object> lista = new ArrayList();
-//        lista.add(new NodoArbol("Diego", null, null));
-//        lista.add(new NodoArbol("Angel", null, null));
-//        lista.add(new NodoArbol("Jairo", null, null));
-//        lista.add(new NodoArbol("Chejo", null, null));
-//        lista.add(new NodoArbol("Mayorga", null, null));
-//        lista.add(new NodoArbol("Jeranio", null, null));
+//        ArrayList<NodoEstado> lista = new ArrayList();
+//        NodoEstado estado0 = new NodoEstado("S0");
+//        estado0.setNumero(1);
+//        estado0.setNumero(2);
+//        estado0.setNumero(3);
+//        lista.add(estado0);
 //
-//        ArbolBinario arbol = new ArbolBinario("Nombre", null);
+//        ArrayList<Integer> numeros = estado0.getNumeros();
 //
+//        int tamanio = numeros.size();
 //        int contador = 0;
-//        while (contador < lista.size()) {
-//            NodoArbol nodo = (NodoArbol) lista.get(contador);
-//            System.out.println("Elemento: " + nodo.getValor());
+//
+//        while (contador < tamanio) {
+//            int number = numeros.get(contador);
+//            System.out.println("Número: " + number);
+//            if (contador == 2) {
+//                numeros.add(4);
+//                tamanio++;
+//            } else if (contador == 3) {
+//                numeros.add(5);
+//                tamanio++;
+//            }
 //            contador++;
 //        }
-//        for (Object i : lista) {
-//            NodoArbol node = (NodoArbol) i;
-//            System.out.println(node.getValor());
+//        for (Integer numero : numeros) {
+//            numeros.add(4);
 //        }
-//
-//        ArrayList<Integer> listaNumeros = new ArrayList();
-//        for (int i = 1; i < 11; i++) {
-//            int numeroRandom = (int) (Math.random() * (100 - 0) + 0);
-//            listaNumeros.add(numeroRandom);
+
+//        boolean siExiste = elementosExistentesDeEstado(lista.get(0).getNumeros());
+//        if (siExiste) {
+//            System.out.println("Si existe");
+//        } else {
+//            System.out.println("No existe");
 //        }
-//        
-//        System.out.println("Numeros ordenados:");
-//        Collections.sort(listaNumeros);
-//        for (Integer i : listaNumeros) {
-//            System.out.println(i);
-//        }
+    }
+
+    public static boolean elementosExistentesDeEstado(ArrayList<Integer> numeros) {
+        boolean bandera = false;
+        ArrayList<Integer> anteriores = new ArrayList();
+        anteriores.add(2);
+        anteriores.add(1);
+        anteriores.add(3);
+        int longitudAnterior = anteriores.size();
+        int longitudActual = numeros.size();
+        int comparador = 0;
+
+        if (longitudAnterior == longitudActual) {
+            for (Integer anterior : anteriores) {
+                for (Integer numero : numeros) {
+                    if (anterior == numero) {
+                        comparador++;
+                    }
+                }
+            }
+        }
+        if (comparador == longitudActual) {
+            bandera = true;
+        }
+
+        return bandera;
     }
 }
