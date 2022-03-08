@@ -36,21 +36,6 @@ public class ListaSimple {
         }
     }
 
-    public void insertarNodoAceptacion() { //
-        NodoAceptacion nodo = new NodoAceptacion();
-    }
-
-    public void insertarSiguientes() { //
-        NodoSiguientes nodo = new NodoSiguientes();
-    }
-
-    public void insertarEstados() { //
-        //NodoEstado nodo = new NodoEstado();
-    }
-
-    public void insertarTerminales() { //
-        NodoTerminal nodo = new NodoTerminal();
-    }
 
     public void mostrar() {
         NodoSimple aux = this.primero;

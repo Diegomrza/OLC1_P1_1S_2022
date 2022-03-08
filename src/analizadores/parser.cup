@@ -12,13 +12,13 @@ parser code
 	public void syntax_error(Symbol s){ 
             System.out.println("\u001B[31m"+"Error sintactico en la linea "+s.left+" columna "+s.right+" No se esperaba este componente: "+s.value+"\u001B[0m"); 
             //Instruction.lista.addError(new Error_("Sintactico error: "+s.value, "Sintactico"));
-            Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error sintactico: "+s.value, "Sintactico"));
+            Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error sintactico: "+s.value, "Sintactico", s.left, s.right));
     }
 	/*Method that is called when parser can't be recovered*/
 	public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
             System.out.println("\u001B[31m"+"Error sintactico uncovered en la linea "+s.left+" columna "+s.right+" No se esperaba este componente: "+s.value+"\u001B[0m"); 
             //Instruction.lista.addError(new Error_("Sintactico error: "+s.value, "Sintactico"));
-            Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error sintactico: "+s.value, "Sintactico"));
+            Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error sintactico: "+s.value, "Sintactico", s.left, s.right));
     } 
 :}
  
@@ -103,11 +103,11 @@ comentario ::=
 ;
 
 conjunto ::= 
-     CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR AZMINUS:b ONDULADO AZMINUS:c  {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
-    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR AZMAYUS:b ONDULADO AZMAYUS:c  {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
-    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR NUMERO:b ONDULADO NUMERO:c  {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
-    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR NOTACIONCOMAS:b  {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b,"",""); :} //System.out.println(a+" :-: "+b);
-    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR SIMBOLO:b ONDULADO SIMBOLO:c  {: Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); :} //System.out.println(a+" :-: " + b + " :-: "+c);
+     CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR AZMINUS:b ONDULADO AZMINUS:c  {: String [] conjunto = {a, b, c}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); :}
+    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR AZMAYUS:b ONDULADO AZMAYUS:c  {: String [] conjunto = {a, b, c}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); :} 
+    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR NUMERO:b ONDULADO NUMERO:c  {: String [] conjunto = {a, b, c}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); :} 
+    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR NOTACIONCOMAS:b  {: String [] conjunto = {a, b}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); :} 
+    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR SIMBOLO:b ONDULADO SIMBOLO:c  {: String [] conjunto = {a, b, c}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); :}
 ;
 
 regulares ::= 
@@ -119,7 +119,7 @@ regulares ::=
 ;
 
 evaluar ::=
-    IDENTIFICADOR:i DOSPUNTOS CADENA:j  {: Proyecto1_Compi.Menu.elementos.insertar(i,"CADENA","","",j); :}
+    IDENTIFICADOR:i DOSPUNTOS CADENA:j  {: String []cadena = {i, j }; Proyecto1_Compi.Menu.cadenas.add(cadena); :}
 ;
 
 polaca ::= 

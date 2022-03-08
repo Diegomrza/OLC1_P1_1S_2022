@@ -65,5 +65,5 @@ TKESPECIALES = (\\n|\\\'|\\\")
 
 . { 
     System.out.println("\u001B[31m"+"Error lexico en: "+yytext()+" en la linea: "+yyline+ " en la columna: "+ yychar+ "\u001B[0m");
-    Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error léxico: "+yytext(), "Lexico"));
+    Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error léxico: "+yytext(), "Lexico", yyline, yychar));
 }

@@ -208,13 +208,13 @@ public class Parser extends java_cup.runtime.lr_parser {
 	public void syntax_error(Symbol s){ 
             System.out.println("\u001B[31m"+"Error sintactico en la linea "+s.left+" columna "+s.right+" No se esperaba este componente: "+s.value+"\u001B[0m"); 
             //Instruction.lista.addError(new Error_("Sintactico error: "+s.value, "Sintactico"));
-            Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error sintactico: "+s.value, "Sintactico"));
+            Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error sintactico: "+s.value, "Sintactico", s.left, s.right));
     }
 	/*Method that is called when parser can't be recovered*/
 	public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
             System.out.println("\u001B[31m"+"Error sintactico uncovered en la linea "+s.left+" columna "+s.right+" No se esperaba este componente: "+s.value+"\u001B[0m"); 
             //Instruction.lista.addError(new Error_("Sintactico error: "+s.value, "Sintactico"));
-            Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error sintactico: "+s.value, "Sintactico"));
+            Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error sintactico: "+s.value, "Sintactico", s.left, s.right));
     } 
 
 
@@ -485,7 +485,7 @@ class CUP$Parser$actions {
 		int cleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int cright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String c = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); 
+		 String [] conjunto = {a, b, c}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("conjunto",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -503,7 +503,7 @@ class CUP$Parser$actions {
 		int cleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int cright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String c = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); 
+		 String [] conjunto = {a, b, c}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("conjunto",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -521,7 +521,7 @@ class CUP$Parser$actions {
 		int cleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int cright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String c = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); 
+		 String [] conjunto = {a, b, c}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("conjunto",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -536,7 +536,7 @@ class CUP$Parser$actions {
 		int bleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int bright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String b = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b,"",""); 
+		 String [] conjunto = {a, b}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("conjunto",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-5)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -554,7 +554,7 @@ class CUP$Parser$actions {
 		int cleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int cright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String c = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 Proyecto1_Compi.Menu.elementos.insertar(a,"CONJUNTO",b+"-"+c,"",""); 
+		 String [] conjunto = {a, b, c}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("conjunto",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-7)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -588,7 +588,7 @@ class CUP$Parser$actions {
 		int jleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int jright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String j = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 Proyecto1_Compi.Menu.elementos.insertar(i,"CADENA","","",j); 
+		 String []cadena = {i, j }; Proyecto1_Compi.Menu.cadenas.add(cadena); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("evaluar",5, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;

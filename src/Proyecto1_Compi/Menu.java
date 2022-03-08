@@ -29,9 +29,11 @@ public class Menu extends javax.swing.JFrame {
      */
     private String nombreArchivo = "";
     public static ArrayList<ArbolBinario> arboles = new ArrayList<>();
-    public static ListaSimple elementos = new ListaSimple();
+    public static ArrayList<String[]> comentarios = new ArrayList();
+    public static ArrayList<String[]> conjuntos = new ArrayList();
+    public static ArrayList<String[]> cadenas = new ArrayList();
     public static LinkedListError listaErr = new LinkedListError();
-public static int contadorGrafosArboles = 0;
+    public static int contadorGrafosArboles = 0;
 
     public Menu() {
         initComponents();
@@ -96,6 +98,11 @@ public static int contadorGrafosArboles = 0;
         });
 
         jButton1.setText("Analizar entradas");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
@@ -206,7 +213,9 @@ public static int contadorGrafosArboles = 0;
         if ("Nuevo archivo".equals(Archivo.getSelectedItem())) {
 
         } else if ("Abrir archivo".equals(Archivo.getSelectedItem())) {
-            elementos.delete();
+            comentarios.clear();
+            cadenas.clear();
+            conjuntos.clear();
             arboles.clear();
             listaErr.clear();
             abrirArchivo(fc); //Método para abrir y obtener el contenido de un archivo
@@ -221,6 +230,7 @@ public static int contadorGrafosArboles = 0;
     }//GEN-LAST:event_opcionesArchivos
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        crearCarpetas();
         if ("".equals(nombreArchivo)) { //Si el nombre que guarda del archivo es vacío significa que no ha seleccionado ningun archivo
             String texto = jTextArea1.getText();
             if (!"".equals(texto)) {
@@ -232,14 +242,137 @@ public static int contadorGrafosArboles = 0;
                 i.inicio();
             }
         } else {
-            for (Error_ error_ : listaErr) {
-                System.out.println(error_.getMensaje());
-                System.out.println(error_.getTipo());
+
+            ReporteErrores();
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String cadenasEvaluadas = "";
+
+        for (ArbolBinario arbol : arboles) {
+            for (String[] cadena : cadenas) {
+                if (cadena[0].equals(arbol.getNombre())) {
+                    if (arbol.evaluarCadena(cadena[1])) {
+                        cadenasEvaluadas += "La cadena: " + cadena[1] + " si cumple";
+                    } else {
+                        cadenasEvaluadas += "La cadena: " + cadena[1] + " no cumple";
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void ReporteErrores() {
+        String cadenaErrores = "<!DOCTYPE html>\n"
+                + "<html lang=\"en\">\n"
+                + "<head>\n"
+                + "<meta charset=\"UTF-8\">\n"
+                + "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n"
+                + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+                + "<title>Errores</title>\n"
+                + "</head>\n"
+                + "<body>\n"
+                + "\n"
+                + "\n"
+                + "<TABLE border=\"1\" style=\"margin: 0 auto; font-size: large;\">\n"
+                + "<TR>\n"
+                + "<TD>\n"
+                + "#\n"
+                + "</TD>\n"
+                + "<TD>\n"
+                + "Tipo de error\n"
+                + "</TD>\n"
+                + "<TD>\n"
+                + "Descripción\n"
+                + "</TD>\n"
+                + "<TD>\n"
+                + "Linea \n"
+                + "</TD>\n"
+                + "<TD>\n"
+                + "Columna\n"
+                + "</TD>\n"
+                + "</TR>\n";
+        int contadorErrores = 1;
+        for (Error_ error_ : listaErr) {
+            cadenaErrores += "<TR>\n";
+            cadenaErrores += "<TD>" + String.valueOf(contadorErrores) + "</TD>\n";
+            cadenaErrores += "<TD>" + error_.getTipo() + "</TD>\n";
+            cadenaErrores += "<TD>" + error_.getMensaje() + "</TD>\n";
+            cadenaErrores += "<TD>" + error_.getFila() + "</TD>\n";
+            cadenaErrores += "<TD>" + error_.getColumna() + "</TD>\n";
+            cadenaErrores += "</TR>\n";
+            contadorErrores++;
+        }
+        cadenaErrores += ""
+                + "</TABLE>\n"
+                + "\n"
+                + "\n"
+                + "</body>\n"
+                + "</html>";
+
+        try {
+            String ruta = "Reportes/Errores_201901429/Errores" + String.valueOf(contadorGrafosArboles) + ".html";
+
+            File file = new File(ruta);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(cadenaErrores);
+            bw.close();
+        } catch (Exception e) {
+            System.out.println("Error");
+            e.printStackTrace();
+        }
+
+    }
+
+    private void crearCarpetas() {
+        File arboles = new File("Reportes/Arboles_201901429");
+        if (!arboles.exists()) {
+            if (arboles.mkdirs()) {
+                System.out.println("Directorio creado");
             }
         }
 
+        File siguiente = new File("Reportes/Siguientes_201901429");
+        if (!siguiente.exists()) {
+            if (siguiente.mkdirs()) {
+                System.out.println("Directorio creado");
+            }
+        }
 
-    }//GEN-LAST:event_jButton3ActionPerformed
+        File transiciones = new File("Reportes/Transiciones_201901429");
+        if (!transiciones.exists()) {
+            if (transiciones.mkdirs()) {
+                System.out.println("Directorio creado");
+            }
+        }
+
+        File AFD = new File("Reportes/AFD_201901429");
+        if (!AFD.exists()) {
+            if (AFD.mkdirs()) {
+                System.out.println("Directorio creado");
+            }
+        }
+
+        File Errores = new File("Reportes/Errores_201901429");
+        if (!Errores.exists()) {
+            if (Errores.mkdirs()) {
+                System.out.println("Directorio creado");
+            }
+        }
+        File salidas = new File("Reportes/Salidas_201901429");
+        if (!salidas.exists()) {
+            if (salidas.mkdirs()) {
+                System.out.println("Directorio creado");
+            }
+        }
+
+    }
 
     private String leerArchivo(String rutaArchivo) throws IOException {
         String textoFinal = "";

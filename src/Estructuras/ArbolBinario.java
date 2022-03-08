@@ -156,50 +156,6 @@ public class ArbolBinario {
         }
     }
 
-    private void crearCarpetas() {
-        File arboles = new File("Reportes/Arboles_201901429");
-        if (!arboles.exists()) {
-            if (arboles.mkdirs()) {
-                System.out.println("Directorio creado");
-            }
-        }
-
-        File siguiente = new File("Reportes/Siguientes_201901429");
-        if (!siguiente.exists()) {
-            if (siguiente.mkdirs()) {
-                System.out.println("Directorio creado");
-            }
-        }
-
-        File transiciones = new File("Reportes/Transiciones_201901429");
-        if (!transiciones.exists()) {
-            if (transiciones.mkdirs()) {
-                System.out.println("Directorio creado");
-            }
-        }
-
-        File AFD = new File("Reportes/AFD_201901429");
-        if (!AFD.exists()) {
-            if (AFD.mkdirs()) {
-                System.out.println("Directorio creado");
-            }
-        }
-
-        File Errores = new File("Reportes/Errores_201901429");
-        if (!Errores.exists()) {
-            if (Errores.mkdirs()) {
-                System.out.println("Directorio creado");
-            }
-        }
-        File salidas = new File("Reportes/Salidas_201901429");
-        if (!salidas.exists()) {
-            if (salidas.mkdirs()) {
-                System.out.println("Directorio creado");
-            }
-        }
-
-    }
-
     //Getters
     public String getNombre() {
         return nombre;
@@ -220,7 +176,7 @@ public class ArbolBinario {
 
     //Inicia el proceso del método del árbol************************************
     public void inicio() {
-        crearCarpetas();
+
         nombrarNodos(this.root);            //Asigna los nombres a los nodos
         anulabilidad(this.root);            //Asigna la anulabilidad
         primerosNodoHoja(this.root);        //Primeras posiciones de los nodos hoja
@@ -237,6 +193,7 @@ public class ArbolBinario {
         generarGrafo(this.root);            //Genera el árbol
         generarSiguientes();                //Genera la tabla de siguientes
         generarTransiciones();
+        generarAFD();
     }
 
     private void anulabilidad(NodoArbol root) {
@@ -254,7 +211,7 @@ public class ArbolBinario {
         }
     }
 
-    //Métodos para colocar los anulables----------------------------------------
+    //Métodos para colocar los anulables
     private void or(NodoArbol root) {
         if ("|".equals(root.getValor())) {
             if (root.getIzquierda().isAnulable() || root.getDerecha().isAnulable()) {
@@ -297,7 +254,7 @@ public class ArbolBinario {
         }
     }
 
-    //Método para asignar los nombres a los nodos ------------------------------
+    //Método para asignar los nombres a los nodos 
     private void nombrarNodos(NodoArbol root) {
         if (root != null) {
             nombrarNodos(root.getIzquierda());
@@ -364,7 +321,7 @@ public class ArbolBinario {
         return ULTIMOS;
     }
 
-    //Primeros y ultimos de los nodos | . * ? +---------------------------------
+    //Primeros y ultimos de los nodos | . * ? +
     private void primerosYultimos(NodoArbol root) {
         if (root != null) {
             primerosYultimos(root.getIzquierda());
@@ -398,7 +355,7 @@ public class ArbolBinario {
         }
     }
 
-    //Método que calcula el siguiente de cada nodo . + * -----------------------
+    //Método que calcula el siguiente de cada nodo . + * 
     private void calcularSiguientes(NodoArbol root) { //Solo se calcula con . + *
         if (root != null) {
             calcularSiguientes(root.getIzquierda());
@@ -464,7 +421,7 @@ public class ArbolBinario {
         return bandera;
     }
 
-    //Para el rango de simbolos de la forma Simbolo ~ Simbolo-------------------
+    //Para el rango de simbolos de la forma Simbolo ~ Simbolo
     private int[] rangoDeSimbolos(String inicio, String fin) {
         int a = inicio.getBytes(StandardCharsets.US_ASCII)[0];
         int b = fin.getBytes(StandardCharsets.US_ASCII)[0];
@@ -721,11 +678,15 @@ public class ArbolBinario {
         return null;
     }
 
-    /*
-*
-     */
+    
     private void generarAFD() {
-
+        String cadena = "digraph G {\n"
+                + "\n";
+        for (String[] transicion : this.transiciones) {
+            cadena += transicion[0] + "->" + transicion[2] + "[label=" + "\"" + transicion[1] + "\"" + "];\n";
+        }
+        cadena += "}";
+        generarGraphviz(cadena, "Reportes/AFD_201901429/");
     }
 
     private void generarErrores() {
@@ -798,11 +759,14 @@ public class ArbolBinario {
             int i = 0;
             for (String[] columna : columnas) {
                 if (i != 0) {
-                    if (busquedaTransicion(estado.getNombre(), columna[0]) != null) {
-                        cadena += "<TD>" + transiciones.get(i)[2] + "</TD>";
-                    } else {
-                        cadena += "<TD>" + "</TD>";
+                    if (i < transiciones.size()) {
+                        if (busquedaTransicion(estado.getNombre(), columna[0]) != null) {
+                            cadena += "<TD>" + transiciones.get(i)[2] + "</TD>";
+                        } else {
+                            cadena += "<TD>" + "</TD>";
+                        }
                     }
+
                 }
                 i++;
             }
@@ -823,5 +787,17 @@ public class ArbolBinario {
             }
         }
         return null;
+    }
+
+    public boolean evaluarCadena(String cadena) {
+
+        String cadenaSeparada[] = cadena.split("");
+        int tamanioCadena = 0;
+
+        for (String[] transicion : transiciones) {
+
+        }
+
+        return false;
     }
 }
