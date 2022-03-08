@@ -1,6 +1,9 @@
 package Estructuras;
 
 import Estructuras.Nodos.NodoEstado;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -22,8 +25,13 @@ public class ArbolBinario {
     private ArrayList<String[]> siguientes = new ArrayList();
     private ArrayList<NodoEstado> estados = new ArrayList();
     private ArrayList<String[]> terminales = new ArrayList();
+    private ArrayList<String[]> terminalesNoRepetidos = new ArrayList();
 
     private ArrayList<String[]> temporal = new ArrayList();
+
+    //Estado, entrada, transicion
+    private ArrayList<String[]> transiciones = new ArrayList();
+    private String nameEstado = "";
 
     //Constructor
     public ArbolBinario(String nombre, NodoArbol root) {
@@ -114,30 +122,82 @@ public class ArbolBinario {
             }
         }
         cadena += "}";
-        System.out.println("Cadena: " + nombre + " " + cadena);
-        /*
-        digraph G {
-        node [shape=record];
-        nodo1[label="<n0>|{ F |.|   }| <n1> "];
-        nodo2[label="<n2>|{ F |.|   }| <n3> "];
-        nodo3[label="    |{ F |#| 3 }|      "];
-        nodo4[label="<n4>|{ F |.|   }| <n1> "];
-        nodo5[label="    |{ F |b| 2 }|      "];
-        nodo6[label="<n5>|{ F |.|   }|      "];
-        nodo7[label="    |{ F |b| 1 }|      "];
-    
-        nodo1:n0 -> nodo2;
-        nodo1:n1 -> nodo3;
-    
-        nodo2:n2 -> nodo4;
-        nodo2:n3 -> nodo5;
-    
-        nodo4:n4 -> nodo6;
-    
-        nodo6:n5 -> nodo7;
-    
+        generarGraphviz(cadena, "Reportes/Arboles_201901429/");
+        //System.out.println("Cadena: " + nombre + " " + cadena);
+
+    }
+
+    private void generarGraphviz(String cadena, String carpeta) {
+        String nombreGrafo = carpeta + "grafo" + String.valueOf(Proyecto1_Compi.Menu.contadorGrafosArboles);
+        String path = carpeta + "grafo" + String.valueOf(Proyecto1_Compi.Menu.contadorGrafosArboles) + ".png";
+        Proyecto1_Compi.Menu.contadorGrafosArboles++;
+        FileWriter fichero = null;
+        PrintWriter escritor;
+        try {
+            fichero = new FileWriter(nombreGrafo + ".dot");
+            escritor = new PrintWriter(fichero);
+            escritor.print(cadena);
+        } catch (Exception e) {
+            System.err.println("Error al escribir el archivvo");
+        } finally {
+            try {
+                if (null != fichero) {
+                    fichero.close();
+                }
+            } catch (Exception e2) {
+                System.err.println("Error al cerrar el archivo");
+            }
         }
-         */
+        try {
+            Runtime rt = Runtime.getRuntime();
+            rt.exec("dot -Tpng -o " + path + " " + nombreGrafo + ".dot");
+        } catch (Exception ex) {
+            System.err.println("Error al generar la imagen");
+        }
+    }
+
+    private void crearCarpetas() {
+        File arboles = new File("Reportes/Arboles_201901429");
+        if (!arboles.exists()) {
+            if (arboles.mkdirs()) {
+                System.out.println("Directorio creado");
+            }
+        }
+
+        File siguiente = new File("Reportes/Siguientes_201901429");
+        if (!siguiente.exists()) {
+            if (siguiente.mkdirs()) {
+                System.out.println("Directorio creado");
+            }
+        }
+
+        File transiciones = new File("Reportes/Transiciones_201901429");
+        if (!transiciones.exists()) {
+            if (transiciones.mkdirs()) {
+                System.out.println("Directorio creado");
+            }
+        }
+
+        File AFD = new File("Reportes/AFD_201901429");
+        if (!AFD.exists()) {
+            if (AFD.mkdirs()) {
+                System.out.println("Directorio creado");
+            }
+        }
+
+        File Errores = new File("Reportes/Errores_201901429");
+        if (!Errores.exists()) {
+            if (Errores.mkdirs()) {
+                System.out.println("Directorio creado");
+            }
+        }
+        File salidas = new File("Reportes/Salidas_201901429");
+        if (!salidas.exists()) {
+            if (salidas.mkdirs()) {
+                System.out.println("Directorio creado");
+            }
+        }
+
     }
 
     //Getters
@@ -160,20 +220,23 @@ public class ArbolBinario {
 
     //Inicia el proceso del método del árbol************************************
     public void inicio() {
+        crearCarpetas();
         nombrarNodos(this.root);            //Asigna los nombres a los nodos
         anulabilidad(this.root);            //Asigna la anulabilidad
         primerosNodoHoja(this.root);        //Primeras posiciones de los nodos hoja
         ultimosNodoHoja(this.root);         //Ultimas posiciones de los nodos hoja
         primerosYultimos(this.root);        //Calcula los primeros y los ulltimos de los nodos no hoja
         calcularSiguientes(this.root);      //Calcula los siguientes de todos los nodos
-        declararTerminales(this.root);      //
 
-        tablaSiguientes(this.root);
-        quitarRepetidosDeSiguientes(this.root);
-        //imprimirSiguientes();
-        //generarGrafo(this.root);
-        crearPrimerEstado();
-        crearEstados();
+        declararTerminales(this.root);      //Para guardar todos los nodos hoja existentes
+
+        tablaSiguientes(this.root);         //Creacion de la tabla de siguientes
+        quitarRepetidosDeSiguientes(this.root); //Quita los repetidos de la tabla de siguientes y unifica los conjuntos de los repetidos
+        crearPrimerEstado();                //Crea el estado S0
+        crearEstados();                     //Crea todos los demás estados a partir del S1
+        generarGrafo(this.root);            //Genera el árbol
+        generarSiguientes();                //Genera la tabla de siguientes
+        generarTransiciones();
     }
 
     private void anulabilidad(NodoArbol root) {
@@ -376,22 +439,24 @@ public class ArbolBinario {
             declararTerminales(root.getIzquierda());
             declararTerminales(root.getDerecha());
             //* | + . ?
-            if (!"*".equals(root.getValor()) && !"|".equals(root.getValor()) && !"+".equals(root.getValor()) && !".".equals(root.getValor()) && !"?".equals(root.getValor()) && !"#".equals(root.getValor())) {
+            if (!"*".equals(root.getValor()) && !"|".equals(root.getValor()) && !"+".equals(root.getValor()) && !".".equals(root.getValor()) && !"?".equals(root.getValor())) {
                 String terminal[] = new String[3];
                 terminal[0] = String.valueOf(root.getNumero());
                 terminal[1] = root.getValor();
 
                 terminales.add(terminal);
-//                if (!existeTerminal(terminal[1])) {
-//                    terminales.add(terminal);
-//                }
+                if (!existeTerminal(terminal[1])) {
+                    if (!"#".equals(root.getValor())) {
+                        terminalesNoRepetidos.add(terminal);
+                    }
+                }
             }
         }
     }
 
     private boolean existeTerminal(String terminal) {
         boolean bandera = false;
-        for (String[] i : this.terminales) {
+        for (String[] i : this.terminalesNoRepetidos) {
             if (terminal.equals(i[1])) {
                 bandera = true;
             }
@@ -428,25 +493,21 @@ public class ArbolBinario {
     private void crearPrimerEstado() {
         NodoEstado estado0 = new NodoEstado("S0");
         String primeros[] = this.root.getPrimeros().split(",");
+        //System.out.println("Estado inicial: ");
         for (String i : primeros) {
+            //System.out.println(i);
             estado0.setNumero(Integer.parseInt(i));
         }
         this.estados.add(estado0);
-
-//        for (NodoEstado i : this.estados) {
-//            System.out.println(i.getNombre());
-//            ArrayList<Integer> numeros = i.getNumeros();
-//            for (Integer n : numeros) {
-//                System.out.println("numero: " + n);
-//            }
-//        }
     }
 
     private void crearEstados() {
         int tamanio = this.estados.size();
         int contadorIteraciones = 0;
         while (contadorIteraciones < tamanio) {
-            ArrayList<Integer> numeros = this.estados.get(contadorIteraciones).getNumeros();
+            String nombreEstado = this.estados.get(contadorIteraciones).getNombre(); //Nombre estado actual
+
+            ArrayList<Integer> numeros = this.estados.get(contadorIteraciones).getNumeros(); //Conjunto del estado actual
             ArrayList<String[]> termnales = new ArrayList();  //Arreglo temporal para guardar los simbolos
 
             //Obtenemos los elementos del estado y agregamos el simbolo a una lista temporal
@@ -455,7 +516,6 @@ public class ArbolBinario {
                 if (t != null) {
                     termnales.add(t);
                 }
-
             }
 
             //Luego en una lista temporal global ingresamos el simbolo solamente una vez para juntar el conjunto final en caso de que sean varios
@@ -467,60 +527,32 @@ public class ArbolBinario {
                     verificarTemporal(termnales.get(i));
                 }
             }
+            //numero, simbolo, conjunto(numeros)
             for (String[] temp : temporal) {
-                ArrayList<Integer> elementos = new ArrayList();
-                String[] elem = temp[2].split(",");
-                for (int i = 0; i < elem.length; i++) {
-                    elementos.add(Integer.parseInt(elem[i]));
-                }
-                if (!existeEstado(elementos)) {
-                    NodoEstado nuevoE = new NodoEstado("S" + String.valueOf(contadorEstados));
-                    nuevoE.setNumeros(elementos);
-                    estados.add(nuevoE);
-                    contadorEstados++;
-                    tamanio++;
+                if (!"".equals(temp[2])) {
+                    ArrayList<Integer> elementos = new ArrayList();
+                    String[] elem = temp[2].split(",");
+                    for (int i = 0; i < elem.length; i++) {
+                        elementos.add(Integer.parseInt(elem[i]));
+                    }
+                    if (!existeEstado(elementos)) {
+                        NodoEstado nuevoE = new NodoEstado("S" + String.valueOf(contadorEstados));
+                        nuevoE.setNumeros(elementos);
+                        estados.add(nuevoE);
+                        contadorEstados++;
+                        tamanio++;
+                        String[] transicion = {nombreEstado, temp[1], nuevoE.getNombre()};
+                        transiciones.add(transicion);
+                    } else {
+                        String[] transicion = {nombreEstado, temp[1], nameEstado};
+                        transiciones.add(transicion);
+                        nameEstado = "";
+                    }
                 }
             }
             temporal.clear();
             contadorIteraciones++;
         }
-        System.out.println(estados.size());
-
-//        for (NodoEstado estado : this.estados) {
-//
-//            ArrayList<Integer> numeros = estado.getNumeros();  //Numeros del estado
-//            ArrayList<String[]> termnales = new ArrayList();  //Arreglo temporal para guardar los simbolos
-//
-//            //Obtenemos los elementos del estado y agregamos el simbolo a una lista temporal
-//            for (int i = 0; i < numeros.size(); i++) {
-//                String t[] = obtenerSiguiente(numeros.get(i));
-//                termnales.add(t);
-//            }
-//
-//            //Luego en una lista temporal global ingresamos el simbolo solamente una vez para juntar el conjunto final en caso de que sean varios
-//            for (int i = 0; i < termnales.size(); i++) {
-//                if (temporal.isEmpty()) {
-//                    temporal.add(termnales.get(i));
-//                } else {
-//                    //Symbol,state,follow
-//                    verificarTemporal(termnales.get(i));
-//                }
-//            }
-//            for (String[] temp : temporal) {
-//                ArrayList<Integer> elementos = new ArrayList();
-//                String[] elem = temp[2].split(",");
-//                for (int i = 0; i < elem.length; i++) {
-//                    elementos.add(Integer.parseInt(elem[i]));
-//                }
-//                if (!existeEstado(elementos)) {
-//                    NodoEstado nuevoE = new NodoEstado("S" + String.valueOf(contadorEstados));
-//                    nuevoE.setNumeros(elementos);
-//                    estados.add(estado);
-//                    contadorEstados++;
-//                }
-//            }
-//            temporal.clear();
-//        }
     }
 
     private void tablaSiguientes(NodoArbol root) {
@@ -550,7 +582,10 @@ public class ArbolBinario {
                         }
                     }
                 }
-
+            }
+            if ("#".equals(root.getValor())) {
+                String[] n = {String.valueOf(root.getNumero()), "#", ""};
+                this.siguientes.add(n);
             }
         }
     }
@@ -561,30 +596,30 @@ public class ArbolBinario {
             quitarRepetidosDeSiguientes(root.getDerecha());
             for (String[] siguiente : this.siguientes) {
 
-                String[] arr = siguiente[2].split(","); //En la posicion 2 están los numeros
-                ArrayList<Integer> repetidos = new ArrayList();  //Los ingresamos en un arrayList
-                for (int i = 0; i < arr.length; i++) {
-                    repetidos.add(Integer.parseInt(arr[i]));
-                }
-                Set<Integer> hashset = new HashSet(repetidos);
-                repetidos.clear();
-                repetidos.addAll(hashset);
-                Collections.sort(repetidos);
-                String sinRepetir = "";
-                int contador = 0;
-                for (Integer i : repetidos) {
-                    if (contador < repetidos.size() - 1) {
-                        sinRepetir += i + ",";
-                    } else {
-                        sinRepetir += i;
+                if (!"".equals(siguiente[2])) {
+                    String[] arr = siguiente[2].split(","); //En la posicion 2 están los numeros
+                    ArrayList<Integer> repetidos = new ArrayList();  //Los ingresamos en un arrayList
+                    for (int i = 0; i < arr.length; i++) {
+                        repetidos.add(Integer.parseInt(arr[i]));
                     }
-                    contador++;
+                    Set<Integer> hashset = new HashSet(repetidos);
+                    repetidos.clear();
+                    repetidos.addAll(hashset);
+                    Collections.sort(repetidos);
+                    String sinRepetir = "";
+                    int contador = 0;
+                    for (Integer i : repetidos) {
+                        if (contador < repetidos.size() - 1) {
+                            sinRepetir += i + ",";
+                        } else {
+                            sinRepetir += i;
+                        }
+                        contador++;
+                    }
+                    siguiente[2] = sinRepetir;
                 }
-                siguiente[2] = sinRepetir;
             }
-
         }
-
     }
 
     private String[] obtenerTerminal(int t) {
@@ -611,7 +646,7 @@ public class ArbolBinario {
     private void verificarTemporal(String[] simbolo) {
         boolean bandera = false;
         for (String temp[] : temporal) {
-            if (simbolo[1].equals(temp[1])) {
+            if (simbolo[1].equals(temp[1])) { //número, simbolo, conjunto
                 String[] numerosSimbolo = simbolo[2].split(",");
                 String[] numerosTemp = temp[2].split(",");
 
@@ -628,6 +663,7 @@ public class ArbolBinario {
                 numerosTotales.clear();
                 numerosTotales.addAll(hashset);
                 Collections.sort(numerosTotales);
+
                 String sinRepetir = "";
                 int contador = 0;
                 for (Integer i : numerosTotales) {
@@ -660,7 +696,7 @@ public class ArbolBinario {
             if (longitudAnterior == longitudActual) {
                 for (Integer anterior : numerosEstado) {
                     for (Integer numero : numeros) {
-                        if (anterior == numero) {
+                        if (anterior.equals(numero)) {
                             comparador++;
                         }
                     }
@@ -668,6 +704,7 @@ public class ArbolBinario {
             }
             if (comparador == longitudActual) {
                 bandera = true;
+                this.nameEstado = estado.getNombre();
             }
         }
 
@@ -679,6 +716,110 @@ public class ArbolBinario {
         for (String[] siguiente : siguientes) {
             if (siguiente[0].equals(String.valueOf(simbolo))) {
                 return siguiente;
+            }
+        }
+        return null;
+    }
+
+    /*
+*
+     */
+    private void generarAFD() {
+
+    }
+
+    private void generarErrores() {
+
+    }
+
+    private void generarSalidas() {
+
+    }
+
+    private void generarSiguientes() {
+        String cadena = "digraph G {\n"
+                + "\n"
+                + "node[shape=record];\n"
+                + "nodo[label=";
+
+        cadena += "<<TABLE border=\"1\" style=\"margin: 0 auto; font-size: large;\">\n"
+                + "<TR>\n"
+                + "<TD>\n"
+                + "i\n"
+                + "</TD>\n"
+                + "<TD>\n"
+                + "Simbolo\n"
+                + "</TD>\n"
+                + "<TD>\n"
+                + "Siguiente\n"
+                + "</TD>\n"
+                + "\n"
+                + "</TR>\n";
+
+        for (String[] siguiente : this.siguientes) {
+            if (!"".equals(siguiente[0]) && !"".equals(siguiente[1])) {
+                cadena += "<TR>\n";
+                cadena += "<TD>\n" + siguiente[0] + "</TD>\n";
+                cadena += "<TD>\n" + siguiente[1] + "</TD>\n";
+                cadena += "<TD>\n" + siguiente[2] + "</TD>\n";
+                cadena += "</TR>";
+            }
+        }
+        cadena += "</TABLE>>];}";
+        generarGraphviz(cadena, "Reportes/Siguientes_201901429/");
+    }
+
+    private void generarTransiciones() {
+        ArrayList<String[]> columnas = new ArrayList(); //Arreglo para guardar las columnas y así saber en que posicion va cada elemento
+        String[] columna1 = {"Estado", "0"};            //Ingresamos como primera columna el estado 0
+        columnas.add(columna1);
+
+        String cadena = "digraph G {\n"
+                + "\n"
+                + "node[shape=record];\n"
+                + "nodo[label=\n"
+                + "<<TABLE border=\"1\">"
+                + "<TR>\n"
+                + "<TD>Estado</TD>\n";
+
+        int contadorColumnas = 0; //Contador que llevara la cuenta de las columnas de la tabla 
+        for (String[] TNR : this.terminalesNoRepetidos) {
+            cadena += "<TD>" + TNR[1] + "</TD>\n";
+
+            String[] auxiliar = {TNR[1], String.valueOf(contadorColumnas)};
+            columnas.add(auxiliar);
+            contadorColumnas++;
+        }
+        cadena += "</TR>\n";
+
+        for (NodoEstado estado : this.estados) {
+            cadena += "<TR>\n";
+            cadena += "<TD>" + estado.getNombre() + "</TD>\n";
+            int i = 0;
+            for (String[] columna : columnas) {
+                if (i != 0) {
+                    if (busquedaTransicion(estado.getNombre(), columna[0]) != null) {
+                        cadena += "<TD>" + transiciones.get(i)[2] + "</TD>";
+                    } else {
+                        cadena += "<TD>" + "</TD>";
+                    }
+                }
+                i++;
+            }
+
+            cadena += "</TR>\n";
+        }
+
+        cadena += "</TABLE>>];";
+        cadena += "}";
+        generarGraphviz(cadena, "Reportes/Transiciones_201901429/");
+    }
+
+    private String[] busquedaTransicion(String estadoInicial, String simbolo) {
+
+        for (String[] transicion : this.transiciones) {
+            if (transicion[0].equals(estadoInicial) && transicion[1].equals(simbolo)) {
+                return transicion;
             }
         }
         return null;

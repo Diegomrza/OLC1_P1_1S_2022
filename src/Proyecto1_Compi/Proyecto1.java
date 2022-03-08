@@ -1,6 +1,6 @@
 package Proyecto1_Compi;
 
-import Estructuras.Nodos.NodoEstado;
+import java.io.File;
 import java.util.*;
 
 public class Proyecto1 {
@@ -8,6 +8,13 @@ public class Proyecto1 {
     public static void main(String[] args) {
         Menu nuevo = new Menu();
         nuevo.setVisible(true);
+
+//       File arboles = new File("Reportes/Arboles_201901429");
+//        if (!arboles.exists()) {
+//            if (arboles.mkdirs()) {
+//                System.out.println("Directorio creado");
+//            }
+//        }
 
 //        ArrayList<NodoEstado> lista = new ArrayList();
 //        NodoEstado estado0 = new NodoEstado("S0");
@@ -36,7 +43,6 @@ public class Proyecto1 {
 //        for (Integer numero : numeros) {
 //            numeros.add(4);
 //        }
-
 //        boolean siExiste = elementosExistentesDeEstado(lista.get(0).getNumeros());
 //        if (siExiste) {
 //            System.out.println("Si existe");

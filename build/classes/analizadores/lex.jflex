@@ -1,5 +1,7 @@
 package analizadores;
 import java_cup.runtime.Symbol; 
+import Error.*;
+import Proyecto1_Compi.Menu.*;
 
 %%
 %class Lector
@@ -33,7 +35,7 @@ TKESPECIALES = (\\n|\\\'|\\\")
 "{"     {return new Symbol(sym.LLAVELEFT, yytext());} 
 "}"     {return new Symbol(sym.LLAVERIGHT, yytext());}
 ";"     {return new Symbol(sym.PUNTOYCOMA, yytext());}
-"%%" {return new Symbol(sym.CAMBIOSECCION, yytext());}
+"%%\n%%" {return new Symbol(sym.CAMBIOSECCION, yytext());}
 "-"     {return new Symbol(sym.GUION, yytext());}
 ">"     {return new Symbol(sym.MAYOR, yytext());}
 ":"     {return new Symbol(sym.DOSPUNTOS, yytext());}
@@ -63,4 +65,5 @@ TKESPECIALES = (\\n|\\\'|\\\")
 
 . { 
     System.out.println("\u001B[31m"+"Error lexico en: "+yytext()+" en la linea: "+yyline+ " en la columna: "+ yychar+ "\u001B[0m");
+    Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error léxico: "+yytext(), "Lexico"));
 }

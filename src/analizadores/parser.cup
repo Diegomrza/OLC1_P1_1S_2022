@@ -2,6 +2,7 @@ package analizadores;
 import java_cup.runtime.*;
 import java.util.ArrayList;
 import Proyecto1_Compi.Menu.*;
+import Error.*;
 import Estructuras.ArbolBinario;
 import Estructuras.NodoArbol;
 
@@ -11,11 +12,13 @@ parser code
 	public void syntax_error(Symbol s){ 
             System.out.println("\u001B[31m"+"Error sintactico en la linea "+s.left+" columna "+s.right+" No se esperaba este componente: "+s.value+"\u001B[0m"); 
             //Instruction.lista.addError(new Error_("Sintactico error: "+s.value, "Sintactico"));
+            Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error sintactico: "+s.value, "Sintactico"));
     }
 	/*Method that is called when parser can't be recovered*/
 	public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
             System.out.println("\u001B[31m"+"Error sintactico uncovered en la linea "+s.left+" columna "+s.right+" No se esperaba este componente: "+s.value+"\u001B[0m"); 
             //Instruction.lista.addError(new Error_("Sintactico error: "+s.value, "Sintactico"));
+            Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error sintactico: "+s.value, "Sintactico"));
     } 
 :}
  
@@ -70,6 +73,7 @@ inicio ::=
     |comentario
     |SALTODELINEA inicio
     |SALTODELINEA
+    | error LLAVERIGHT
 ;
 
 expresion ::= 
@@ -79,6 +83,8 @@ expresion ::=
     |regulares PUNTOYCOMA
     |comentario expresion 
     |comentario
+    |SALTODELINEA expresion
+    |SALTODELINEA
     |error PUNTOYCOMA
 ;
 
@@ -87,6 +93,8 @@ expresion2 ::=
     |evaluar PUNTOYCOMA
     |comentario expresion2
     |comentario
+    |SALTODELINEA expresion2
+    |SALTODELINEA
     |error PUNTOYCOMA
 ;
 
@@ -105,7 +113,9 @@ conjunto ::=
 regulares ::= 
     IDENTIFICADOR:a GUION MAYOR polaca:b  {:NodoArbol root = new NodoArbol(".", b, new NodoArbol("#", null, null)); 
                                             ArbolBinario tree = new ArbolBinario(a, root);
-                                            Proyecto1_Compi.Menu.arboles.add(tree);:}
+                                            Proyecto1_Compi.Menu.arboles.add(tree);
+                                            //tree.generarGrafo(root);
+:}
 ;
 
 evaluar ::=
@@ -118,7 +128,7 @@ polaca ::=
     |PREGUNTA polaca:a                          {: RESULT = new NodoArbol("?", a, null); :}
     |PUNTO polaca:a polaca:b                    {: RESULT = new NodoArbol(".", a, b); :}
     |OR polaca:a polaca:b                       {: RESULT = new NodoArbol("|", a, b); :}
-    |CADENA:a                                   {: a = a.replace("\"", ""); RESULT = new NodoArbol(a, null, null); :}
+    |CADENA:a                                   {: a = a.replace("\"", ""); RESULT = new NodoArbol(" "+a, null, null); :}
     |LLAVELEFT IDENTIFICADOR:a LLAVERIGHT       {: RESULT = new NodoArbol(a, null, null); :}
     |TKESPECIALES:a                             {: RESULT = new NodoArbol(a, null, null); :}
     |SIMBOLO:a                                  {: RESULT = new NodoArbol(a, null, null); :}

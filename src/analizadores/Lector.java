@@ -4,6 +4,8 @@
 
 package analizadores;
 import java_cup.runtime.Symbol; 
+import Error.*;
+import Proyecto1_Compi.Menu.*;
 
 
 // See https://github.com/jflex-de/jflex/issues/222
@@ -100,11 +102,11 @@ public class Lector implements java_cup.runtime.Scanner {
     "\1\0\1\1\1\2\1\3\1\4\1\1\1\4\1\5"+
     "\1\6\1\7\1\10\1\4\1\11\1\12\1\13\1\4"+
     "\1\14\1\15\2\16\1\4\1\17\2\20\1\21\1\22"+
-    "\1\23\1\24\3\0\1\25\3\0\1\17\1\26\2\27"+
-    "\1\30\2\31\1\0\1\17\1\0\1\32\1\30";
+    "\1\23\1\24\7\0\1\17\1\25\2\26\1\0\1\27"+
+    "\2\30\1\0\1\17\2\0\1\31\1\32\1\27";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[47];
+    int [] result = new int[50];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -132,12 +134,13 @@ public class Lector implements java_cup.runtime.Scanner {
     "\0\0\0\47\0\116\0\47\0\47\0\165\0\234\0\47"+
     "\0\47\0\47\0\47\0\303\0\352\0\47\0\47\0\u0111"+
     "\0\47\0\47\0\u0138\0\u015f\0\u0186\0\u01ad\0\u0138\0\u015f"+
-    "\0\47\0\47\0\47\0\47\0\u01d4\0\165\0\u01fb\0\47"+
-    "\0\u0222\0\u0249\0\u0270\0\u0297\0\47\0\47\0\165\0\u0222"+
-    "\0\u02be\0\u02e5\0\u030c\0\u0333\0\u035a\0\u01ad\0\47";
+    "\0\47\0\47\0\47\0\47\0\u01d4\0\165\0\u01fb\0\u0222"+
+    "\0\u0249\0\u0270\0\u0297\0\u02be\0\47\0\47\0\165\0\u02e5"+
+    "\0\u0249\0\u030c\0\u0333\0\u035a\0\u0381\0\u03a8\0\u03cf\0\u01ad"+
+    "\0\47\0\47";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[47];
+    int [] result = new int[50];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -171,17 +174,18 @@ public class Lector implements java_cup.runtime.Scanner {
     "\1\42\3\0\1\26\5\0\4\26\1\44\1\0\5\26"+
     "\1\44\12\0\1\45\2\0\1\45\20\0\1\45\6\0"+
     "\1\45\26\0\1\26\5\0\5\26\1\0\6\26\4\0"+
-    "\6\35\1\46\46\35\1\47\25\35\1\37\12\35\2\50"+
-    "\3\0\42\50\21\0\1\51\5\0\5\52\2\0\5\52"+
-    "\4\0\5\53\1\0\4\53\1\0\12\53\1\0\21\53"+
-    "\21\0\1\26\5\0\3\26\1\54\1\26\1\0\4\26"+
-    "\1\54\1\26\21\0\1\42\3\0\1\51\42\0\1\42"+
-    "\31\0\5\53\1\55\4\53\1\0\12\53\1\0\21\53"+
-    "\21\0\1\26\5\0\2\26\1\56\2\26\1\0\3\26"+
-    "\1\56\2\26\31\0\1\57\21\0";
+    "\6\35\1\46\46\35\1\47\25\35\1\37\12\35\2\0"+
+    "\1\50\44\0\2\51\3\0\42\51\21\0\1\52\5\0"+
+    "\5\53\2\0\5\53\4\0\5\54\1\0\4\54\1\0"+
+    "\12\54\1\0\21\54\21\0\1\26\5\0\3\26\1\55"+
+    "\1\26\1\0\4\26\1\55\1\26\14\0\1\56\53\0"+
+    "\1\42\3\0\1\52\42\0\1\42\31\0\5\54\1\57"+
+    "\4\54\1\0\12\54\1\0\21\54\21\0\1\26\5\0"+
+    "\2\26\1\60\2\26\1\0\3\26\1\60\2\26\14\0"+
+    "\1\61\63\0\1\62\21\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[897];
+    int [] result = new int[1014];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -225,11 +229,11 @@ public class Lector implements java_cup.runtime.Scanner {
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\1\0\1\11\1\1\2\11\2\1\4\11\2\1\2\11"+
-    "\1\1\2\11\6\1\4\11\3\0\1\11\3\0\1\1"+
-    "\2\11\4\1\1\0\1\1\1\0\1\1\1\11";
+    "\1\1\2\11\6\1\4\11\7\0\1\1\2\11\1\1"+
+    "\1\0\3\1\1\0\1\1\2\0\1\1\2\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[47];
+    int [] result = new int[50];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -713,6 +717,7 @@ public class Lector implements java_cup.runtime.Scanner {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
             { System.out.println("\u001B[31m"+"Error lexico en: "+yytext()+" en la linea: "+yyline+ " en la columna: "+ yychar+ "\u001B[0m");
+    Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error léxico: "+yytext(), "Lexico"));
             }
             // fall through
           case 27: break;
@@ -812,32 +817,32 @@ public class Lector implements java_cup.runtime.Scanner {
             // fall through
           case 46: break;
           case 21:
-            { return new Symbol(sym.CAMBIOSECCION, yytext());
+            { return new Symbol(sym.TKESPECIALES, yytext());
             }
             // fall through
           case 47: break;
           case 22:
-            { return new Symbol(sym.TKESPECIALES, yytext());
+            { return new Symbol(sym.CADENA, yytext());
             }
             // fall through
           case 48: break;
           case 23:
-            { return new Symbol(sym.CADENA, yytext());
+            { return new Symbol(sym.COMMENT, yytext());
             }
             // fall through
           case 49: break;
           case 24:
-            { return new Symbol(sym.COMMENT, yytext());
+            { return new Symbol(sym.NOTACIONCOMAS, yytext());
             }
             // fall through
           case 50: break;
           case 25:
-            { return new Symbol(sym.NOTACIONCOMAS, yytext());
+            { return new Symbol(sym.CONJ, yytext());
             }
             // fall through
           case 51: break;
           case 26:
-            { return new Symbol(sym.CONJ, yytext());
+            { return new Symbol(sym.CAMBIOSECCION, yytext());
             }
             // fall through
           case 52: break;
