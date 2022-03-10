@@ -228,6 +228,7 @@ public class Menu extends javax.swing.JFrame {
             crearTexto(contenido);                   //Se lo guardamos al archivo actual
         } else if ("Guardar como...".equals(Archivo.getSelectedItem())) {
             jTextArea2.setText("Archivo guardado con exito");
+            crearArchivoExp();
         } else if ("Generar XML de salida".equals(Archivo.getSelectedItem())) {
             jTextArea2.setText("Archivo generado con exito");
         }
@@ -480,7 +481,7 @@ public class Menu extends javax.swing.JFrame {
         JFileChooser fc = new JFileChooser();
         if (fc.showDialog(null, "Guardar") == JFileChooser.APPROVE_OPTION) {
 
-            crearTextoNuevo(String.valueOf(fc.getSelectedFile()),jTextArea1.getText());
+            crearTextoNuevo(String.valueOf(fc.getSelectedFile()), jTextArea1.getText());
             jTextArea2.setText("Archivo creado con exito");
 
         } else {

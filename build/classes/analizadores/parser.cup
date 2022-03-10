@@ -29,12 +29,9 @@ terminal String NUMERO;
 terminal String AZMINUS;
 terminal String AZMAYUS;
 terminal String NOTACIONCOMAS;
-//terminal String POLACA;
 terminal String CADENA;
 terminal String SIMBOLO;
-
 terminal String TKESPECIALES;
-//terminal String SIMBOLOSESPECIALES;
 
 //Parte 2 terminales
 terminal String LLAVELEFT;
