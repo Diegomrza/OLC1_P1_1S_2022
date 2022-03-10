@@ -3,7 +3,7 @@ package Proyecto1_Compi;
 import Error.Error_;
 import Error.LinkedListError;
 import Estructuras.ArbolBinario;
-import Estructuras.ListaSimple;
+import Estructuras.NodoConjunto;
 import analizadores.Lector;
 import analizadores.Parser;
 import java.io.BufferedReader;
@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -27,13 +28,15 @@ public class Menu extends javax.swing.JFrame {
     /**
      * Creates new form Menu
      */
-    private String nombreArchivo = "";
-    public static ArrayList<ArbolBinario> arboles = new ArrayList<>();
-    public static ArrayList<String[]> comentarios = new ArrayList();
+    private String nombreArchivo = "";                                  //Nombre del archivo seleccionado, en caso de que se seleccione alguno
+    public static ArrayList<ArbolBinario> arboles = new ArrayList<>();  //Lista de los arboles generados con las expresiones regulares
+    public static ArrayList<String[]> comentarios = new ArrayList();    //
     public static ArrayList<String[]> conjuntos = new ArrayList();
     public static ArrayList<String[]> cadenas = new ArrayList();
     public static LinkedListError listaErr = new LinkedListError();
     public static int contadorGrafosArboles = 0;
+
+    public static ArrayList<NodoConjunto> conjuntos_con_elementos = new ArrayList();
 
     public Menu() {
         initComponents();
@@ -211,7 +214,7 @@ public class Menu extends javax.swing.JFrame {
     private void opcionesArchivos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opcionesArchivos
         JFileChooser fc = new JFileChooser();
         if ("Nuevo archivo".equals(Archivo.getSelectedItem())) {
-
+            crearArchivoExp();
         } else if ("Abrir archivo".equals(Archivo.getSelectedItem())) {
             comentarios.clear();
             cadenas.clear();
@@ -219,6 +222,7 @@ public class Menu extends javax.swing.JFrame {
             arboles.clear();
             listaErr.clear();
             abrirArchivo(fc); //Método para abrir y obtener el contenido de un archivo
+
         } else if ("Guardar archivo".equals(Archivo.getSelectedItem())) {
             String contenido = jTextArea1.getText(); //Obtenemos el contenido del textArea1
             crearTexto(contenido);                   //Se lo guardamos al archivo actual
@@ -230,7 +234,9 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_opcionesArchivos
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        jTextArea2.setText("Análisis terminado");
         crearCarpetas();
+        crearConjuntosConElementos();
         if ("".equals(nombreArchivo)) { //Si el nombre que guarda del archivo es vacío significa que no ha seleccionado ningun archivo
             String texto = jTextArea1.getText();
             if (!"".equals(texto)) {
@@ -242,7 +248,6 @@ public class Menu extends javax.swing.JFrame {
                 i.inicio();
             }
         } else {
-
             ReporteErrores();
         }
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -251,16 +256,20 @@ public class Menu extends javax.swing.JFrame {
         String cadenasEvaluadas = "";
 
         for (ArbolBinario arbol : arboles) {
+
             for (String[] cadena : cadenas) {
+                //Nombre, cadena
                 if (cadena[0].equals(arbol.getNombre())) {
+
                     if (arbol.evaluarCadena(cadena[1])) {
-                        cadenasEvaluadas += "La cadena: " + cadena[1] + " si cumple";
+                        cadenasEvaluadas += "La cadena: " + cadena[1] + " si cumple\n";
                     } else {
-                        cadenasEvaluadas += "La cadena: " + cadena[1] + " no cumple";
+                        cadenasEvaluadas += "La cadena: " + cadena[1] + " no cumple\n";
                     }
                 }
             }
         }
+        jTextArea2.setText(cadenasEvaluadas);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void ReporteErrores() {
@@ -403,12 +412,9 @@ public class Menu extends javax.swing.JFrame {
                 String ruta = archivoElegido.toString();//Obtenemos la ruta y la parseamos a String
                 nombreArchivo = ruta;                   //Guardamos la ruta en la variable global nombreArchivo para utilizarla en otros casos
                 String texto = leerArchivo(ruta);       //Obtenemos el texto del archivo
-                System.out.println(texto);
+                //System.out.println(texto);
                 jTextArea1.setText(texto);              //Lo seteamos en el textArea 1
                 analizar(texto);                        //Lo mandamos a analizar con jFlex y Cup
-
-                //System.out.println("\u001B[31m" + "\n\nComentarios: " + "\u001B[0m");
-                //elementos.mostrar();
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, e);                  //En caso de haber un error lo mostramos
             }
@@ -438,14 +444,146 @@ public class Menu extends javax.swing.JFrame {
         }
     }
 
+    public void crearTextoNuevo(String ruta, String texto) {
+        FileWriter flwriter = null;
+        try {
+            flwriter = new FileWriter(ruta);
+            BufferedWriter bfwriter = new BufferedWriter(flwriter);
+            bfwriter.write(texto);
+            bfwriter.close();
+            JOptionPane.showMessageDialog(null, "Archivo guardado satisfactoriamente!");
+        } catch (IOException e) {
+            System.out.println("Error al intentar escribir en el archivo " + e);
+        } finally {
+            if (flwriter != null) {
+                try {
+                    flwriter.close();
+                } catch (IOException e) {
+                    System.out.println("Error al cerrar el flujo principal del archivo...");
+                }
+            }
+        }
+    }
+
     private void analizar(String text) {
         try {
+            //System.out.println(text);
             Lector scanner = new Lector(new BufferedReader(new StringReader(text)));
             Parser parser = new Parser(scanner);
             parser.parse();
         } catch (Exception e) {
         }
     }
+
+    private void crearArchivoExp() {
+
+        JFileChooser fc = new JFileChooser();
+        if (fc.showDialog(null, "Guardar") == JFileChooser.APPROVE_OPTION) {
+
+            crearTextoNuevo(String.valueOf(fc.getSelectedFile()),jTextArea1.getText());
+            jTextArea2.setText("Archivo creado con exito");
+
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo crear un nuevo archivo.");
+        }
+    }
+
+//
+//
+//
+//
+    private void crearConjuntosConElementos() {
+        for (String[] conjunto : conjuntos) {
+            String nombre = conjunto[0];
+            String inicio = conjunto[1];
+            String fin = conjunto[2];
+            NodoConjunto nuevo = new NodoConjunto(nombre);
+
+            int a = inicio.getBytes(StandardCharsets.US_ASCII)[0];
+
+            if ("".equals(fin)) {
+                nuevo.setElementos(simbolo(inicio));
+                conjuntos_con_elementos.add(nuevo);
+            } else {
+                int b = fin.getBytes(StandardCharsets.US_ASCII)[0];
+
+                if (a >= 48 && b <= 57) {
+                    nuevo.setElementos(digitos(inicio, fin));
+                    conjuntos_con_elementos.add(nuevo);
+                } else if (a >= 65 && b <= 90) {
+                    nuevo.setElementos(abecedario(inicio, fin));
+                    conjuntos_con_elementos.add(nuevo);
+                } else if (a >= 97 && b <= 122) {
+                    nuevo.setElementos(abecedario(inicio, fin));
+                    conjuntos_con_elementos.add(nuevo);
+                } else {
+                    nuevo.setElementos(rangoDeSimbolos(inicio, fin));
+                    conjuntos_con_elementos.add(nuevo);
+                }
+            }
+
+        }
+    }
+
+    public ArrayList<Integer> rangoDeSimbolos(String inicio, String fin) {
+        int a = inicio.getBytes(StandardCharsets.US_ASCII)[0];
+        int b = fin.getBytes(StandardCharsets.US_ASCII)[0];
+        if (a >= 32 && b <= 125) {
+            ArrayList<Integer> numeros2 = new ArrayList();
+            int numeros[] = new int[(b - a + 1)];
+            int n = 0;
+            for (int i = a; i < b + 1; i++) {
+                if ((i >= 32 && i <= 47) || (i >= 58 && i <= 64) || (i >= 91 && i <= 96) || (i >= 123 && i <= 125)) {
+                    numeros[n] = i;
+                    n++;
+                }
+            }
+            for (int numero : numeros) {
+                if (numero != 0) {
+                    numeros2.add(numero);
+                }
+            }
+            return numeros2;
+        } else {
+            return null;
+        }
+    }
+
+    public ArrayList<Integer> digitos(String inicio, String fin) {
+        int a = inicio.getBytes(StandardCharsets.US_ASCII)[0];
+        int b = fin.getBytes(StandardCharsets.US_ASCII)[0];
+
+        ArrayList<Integer> numeros = new ArrayList();
+        for (int i = a; i < b; i++) {
+            numeros.add(i);
+        }
+        return numeros;
+    }
+
+    public ArrayList<Integer> abecedario(String inicio, String fin) {
+        int a = inicio.getBytes(StandardCharsets.US_ASCII)[0];
+        int b = fin.getBytes(StandardCharsets.US_ASCII)[0];
+        ArrayList<Integer> numeros = new ArrayList();
+
+        for (int i = a; i < b; i++) {
+            numeros.add(i);
+        }
+        return numeros;
+    }
+
+    public ArrayList<Integer> simbolo(String elementos) {
+        String elementosNuevos[] = elementos.split(",");
+        ArrayList<Integer> numeros = new ArrayList();
+        for (String elem : elementosNuevos) {
+            int a = elem.getBytes(StandardCharsets.US_ASCII)[0];
+            numeros.add(a);
+        }
+        return numeros;
+    }
+//
+//
+//
+//
 
     /**
      * @param args the command line arguments

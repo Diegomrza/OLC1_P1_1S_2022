@@ -17,17 +17,18 @@ import Proyecto1_Compi.Menu.*;
    yychar = 1;
 %init} 
 
+TKESPECIALES = (\\n|\\\'|\\\")
 WHITE = [ \r\t]+
 COMMENT = "<!"[^("!>")]+"!>"|\/\/.+
 IDENTIFICADOR = [a-zA-Z_][a-zA-Z0-9_]*
 NUMERO = [0-9]+
 AZMINUS = [a-z]
 AZMAYUS = [A-Z]
-NOTACIONCOMAS = ([a-zA-Z]\,|[0-9]+\,)+([a-zA-Z]|[0-9]+)
+NOTACIONCOMAS = ([a-zA-Z]\,|[0-9]+\,|{TKESPECIALES}+\,)+([a-zA-Z]|[0-9]+|{TKESPECIALES})
 //POLACA = ((\.|\||\*|\+|\?|[ ])+(\{[a-zA-Z][a-zA-Z0-9_]*\})+|(\.|\||\*|\+|\?|[ ])+(\"[^\"]*\")+|(\{[a-zA-Z][a-zA-Z0-9_]*\})+)+
-SIMBOLO = [\!\#\$\%\&\(\)\,\-\/\:\;\<\=\>\@\\\[\]\^\_\`\{\}] //[ \!\#\$\%\&\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\\\[\]\^\_\`\{\|\}]
-CADENA = \"[\\\"]*[^\"]+\" //({IDENTIFICADOR}{SIMBOLO})+
-TKESPECIALES = (\\n|\\\'|\\\")
+SIMBOLO = [\!\#\$\%\&\(\)\,\-\/\:\;\<\=\>\@\\\[\]\^\_\`\{\}]
+CADENA = \"{TKESPECIALES}*[^\"]+\"
+
 //SIMBOLOSESPECIALES = \"(\.|\+|\*|\?|\||\;|\:|%%|\"|\-|\,|\~|\ )\"
 
 %%

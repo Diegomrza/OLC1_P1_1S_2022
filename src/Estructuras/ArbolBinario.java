@@ -1,6 +1,7 @@
 package Estructuras;
 
 import Estructuras.Nodos.NodoEstado;
+import static Proyecto1_Compi.Menu.conjuntos_con_elementos;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -21,7 +22,7 @@ public class ArbolBinario {
     private int contadorNombreNodos;
     private int contadorEstados = 1;
 
-    private ArrayList nodosAceptacion = new ArrayList();
+    private ArrayList<String> estadosAceptacion = new ArrayList();
     private ArrayList<String[]> siguientes = new ArrayList();
     private ArrayList<NodoEstado> estados = new ArrayList();
     private ArrayList<String[]> terminales = new ArrayList();
@@ -87,7 +88,9 @@ public class ArbolBinario {
 
     //Método que devuelve el codigo de graphviz del arbol
     public void generarGrafo(NodoArbol root) {
-        String cadena = "\n\ndigraph G {\nnode[shape=box]";
+        String cadena = "\n\ndigraph G {\nnode[shape=box]\n";
+        cadena += "label=\"" + nombre + "\";\n"; //Para el nombre del arbol
+        cadena += "fontsize=50;\n"; //Para el nombre del arbol
         Queue<Object> cola = new LinkedList();
         NodoArbol au[] = new NodoArbol[2];
         au[0] = null;
@@ -188,12 +191,17 @@ public class ArbolBinario {
 
         tablaSiguientes(this.root);         //Creacion de la tabla de siguientes
         quitarRepetidosDeSiguientes(this.root); //Quita los repetidos de la tabla de siguientes y unifica los conjuntos de los repetidos
+
         crearPrimerEstado();                //Crea el estado S0
         crearEstados();                     //Crea todos los demás estados a partir del S1
+
         generarGrafo(this.root);            //Genera el árbol
         generarSiguientes();                //Genera la tabla de siguientes
-        generarTransiciones();
-        generarAFD();
+        generarTransiciones();              //Genera la tabla de transiciones
+
+        String simboloAceptacion = String.valueOf(this.root.getDerecha().getNumero());
+        estadosAceptacion(simboloAceptacion);
+        generarAFD();                       //Genera el AFD
     }
 
     private void anulabilidad(NodoArbol root) {
@@ -202,54 +210,28 @@ public class ArbolBinario {
             anulabilidad(root.getDerecha());
             if (root.getIzquierda() == null && root.getDerecha() == null) { //Si 
                 root.setAnulable(false);
-            }
-            or(root);
-            punto(root);
-            kleene(root);
-            pregunta(root);
-            positiva(root);
-        }
-    }
-
-    //Métodos para colocar los anulables
-    private void or(NodoArbol root) {
-        if ("|".equals(root.getValor())) {
-            if (root.getIzquierda().isAnulable() || root.getDerecha().isAnulable()) {
+            } else if ("|".equals(root.getValor())) {
+                if (root.getIzquierda().isAnulable() || root.getDerecha().isAnulable()) {
+                    root.setAnulable(true);
+                } else {
+                    root.setAnulable(false);
+                }
+            } else if (".".equals(root.getValor())) {
+                if (root.getIzquierda().isAnulable() && root.getDerecha().isAnulable()) {
+                    root.setAnulable(true);
+                } else {
+                    root.setAnulable(false);
+                }
+            } else if ("*".equals(root.getValor())) {
                 root.setAnulable(true);
-            } else {
-                root.setAnulable(false);
-            }
-        }
-    }
-
-    private void punto(NodoArbol root) {
-        if (".".equals(root.getValor())) {
-            if (root.getIzquierda().isAnulable() && root.getDerecha().isAnulable()) {
+            } else if ("?".equals(root.getValor())) {
                 root.setAnulable(true);
-            } else {
-                root.setAnulable(false);
-            }
-        }
-    }
-
-    private void kleene(NodoArbol root) {
-        if ("*".equals(root.getValor())) {
-            root.setAnulable(true);
-        }
-    }
-
-    private void pregunta(NodoArbol root) {
-        if ("?".equals(root.getValor())) {
-            root.setAnulable(true);
-        }
-    }
-
-    private void positiva(NodoArbol root) {
-        if (".".equals(root.getValor())) {
-            if (root.getIzquierda().isAnulable()) {
-                root.setAnulable(true);
-            } else {
-                root.setAnulable(false);
+            } else if ("+".equals(root.getValor())) {
+                if (root.getIzquierda().isAnulable()) {
+                    root.setAnulable(true);
+                } else {
+                    root.setAnulable(false);
+                }
             }
         }
     }
@@ -401,10 +383,12 @@ public class ArbolBinario {
                 terminal[0] = String.valueOf(root.getNumero());
                 terminal[1] = root.getValor();
 
+                String TNR[] = {String.valueOf(root.getNumero()), root.getValor()};
+
                 terminales.add(terminal);
                 if (!existeTerminal(terminal[1])) {
                     if (!"#".equals(root.getValor())) {
-                        terminalesNoRepetidos.add(terminal);
+                        terminalesNoRepetidos.add(TNR);
                     }
                 }
             }
@@ -419,30 +403,6 @@ public class ArbolBinario {
             }
         }
         return bandera;
-    }
-
-    //Para el rango de simbolos de la forma Simbolo ~ Simbolo
-    private int[] rangoDeSimbolos(String inicio, String fin) {
-        int a = inicio.getBytes(StandardCharsets.US_ASCII)[0];
-        int b = fin.getBytes(StandardCharsets.US_ASCII)[0];
-        if (a >= 32 && b <= 125) {
-            int numeros[] = new int[(b - a + 1)];
-            int n = 0;
-            for (int i = a; i < b + 1; i++) {
-                if ((i >= 32 && i <= 47) || (i >= 58 && i <= 64) || (i >= 91 && i <= 96) || (i >= 123 && i <= 125)) {
-                    numeros[n] = i;
-                    n++;
-                }
-            }
-            int numero2[] = new int[n];
-            System.arraycopy(numeros, 0, numero2, 0, numero2.length);
-            return numero2;
-        } else {
-            int num[] = new int[1];
-            num[0] = -1;
-            return num;
-        }
-
     }
 
     //--------------------------------------------------------------------------
@@ -678,28 +638,25 @@ public class ArbolBinario {
         return null;
     }
 
-    
+////////
     private void generarAFD() {
         String cadena = "digraph G {\n"
-                + "\n";
+                + "label=\""+nombre+"\"\n";
         for (String[] transicion : this.transiciones) {
+            for (String string : estadosAceptacion) {
+                if (string.equals(transicion[2])) {
+                    cadena += string + "[shape=doublecircle];\n";
+                }
+            }
             cadena += transicion[0] + "->" + transicion[2] + "[label=" + "\"" + transicion[1] + "\"" + "];\n";
         }
         cadena += "}";
         generarGraphviz(cadena, "Reportes/AFD_201901429/");
     }
 
-    private void generarErrores() {
-
-    }
-
-    private void generarSalidas() {
-
-    }
-
     private void generarSiguientes() {
         String cadena = "digraph G {\n"
-                + "\n"
+                + "label=\""+nombre+"\"\n"
                 + "node[shape=record];\n"
                 + "nodo[label=";
 
@@ -736,14 +693,14 @@ public class ArbolBinario {
         columnas.add(columna1);
 
         String cadena = "digraph G {\n"
-                + "\n"
+                + "label=\""+nombre+"\"\n"
                 + "node[shape=record];\n"
                 + "nodo[label=\n"
                 + "<<TABLE border=\"1\">"
                 + "<TR>\n"
                 + "<TD>Estado</TD>\n";
 
-        int contadorColumnas = 0; //Contador que llevara la cuenta de las columnas de la tabla 
+        int contadorColumnas = 1; //Contador que llevara la cuenta de las columnas de la tabla 
         for (String[] TNR : this.terminalesNoRepetidos) {
             cadena += "<TD>" + TNR[1] + "</TD>\n";
 
@@ -761,7 +718,9 @@ public class ArbolBinario {
                 if (i != 0) {
                     if (i < transiciones.size()) {
                         if (busquedaTransicion(estado.getNombre(), columna[0]) != null) {
-                            cadena += "<TD>" + transiciones.get(i)[2] + "</TD>";
+                            String[] fin = busquedaTransicion(estado.getNombre(), columna[0]);
+                            //cadena += "<TD>" + transiciones.get(i)[2] + "</TD>";
+                            cadena += "<TD>" + fin[2] + "</TD>";
                         } else {
                             cadena += "<TD>" + "</TD>";
                         }
@@ -778,6 +737,7 @@ public class ArbolBinario {
         cadena += "}";
         generarGraphviz(cadena, "Reportes/Transiciones_201901429/");
     }
+///////
 
     private String[] busquedaTransicion(String estadoInicial, String simbolo) {
 
@@ -789,15 +749,55 @@ public class ArbolBinario {
         return null;
     }
 
-    public boolean evaluarCadena(String cadena) {
+    private void estadosAceptacion(String simboloAceptacion) {
+        for (NodoEstado estado : this.estados) {
+            ArrayList<Integer> numeros = estado.getNumeros();
+            for (Integer numero : numeros) {
+                if (String.valueOf(numero).equals(simboloAceptacion)) {
+                    estadosAceptacion.add(estado.getNombre());
+                    break;
+                }
+            }
+        }
+    }
 
-        String cadenaSeparada[] = cadena.split("");
-        int tamanioCadena = 0;
+    public boolean evaluarCadena(String cadena0) {
+        String cadena = cadena0.replaceAll("\"", "");
+        String state = "S0"; //estado inicial
+        String[] cadenaPartida = cadena.split("");
 
-        for (String[] transicion : transiciones) {
+        int contador = 0; //para verificar el final de la cadena
 
+        for (String cad : cadenaPartida) {
+            String aux = obtenerNombreConjunto(cad);
+            contador++;
+            //System.out.println("Nombre_ " + aux);
+            
+            if (busquedaTransicion(state, cad) != null) {
+                state = busquedaTransicion(state, cad)[2];
+
+            }
+        }
+        //System.out.println(state);
+        for (String acepta : estadosAceptacion) {
+            if (state.equals(acepta)) {
+                return true;
+            }
         }
 
         return false;
     }
+
+    public String obtenerNombreConjunto(String c) {
+        int ascii = c.getBytes(StandardCharsets.US_ASCII)[0];
+        for (NodoConjunto conjunto : conjuntos_con_elementos) {
+            for (Integer elemento : conjunto.getElementos()) {
+                if (ascii == elemento) {
+                    return conjunto.getNombre();
+                }
+            }
+        }
+        return null;
+    }
+
 }

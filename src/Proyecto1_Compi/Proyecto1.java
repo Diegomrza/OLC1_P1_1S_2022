@@ -6,6 +6,5 @@ public class Proyecto1 {
         Menu nuevo = new Menu();
         nuevo.setVisible(true);
 
-        
     }
 }

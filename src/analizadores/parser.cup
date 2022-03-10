@@ -10,13 +10,13 @@ parser code
 {:
 	/*Method that is called when parser can be recovered*/
 	public void syntax_error(Symbol s){ 
-            System.out.println("\u001B[31m"+"Error sintactico en la linea "+s.left+" columna "+s.right+" No se esperaba este componente: "+s.value+"\u001B[0m"); 
+            //System.out.println("\u001B[31m"+"Error sintactico en la linea "+s.left+" columna "+s.right+" No se esperaba este componente: "+s.value+"\u001B[0m"); 
             //Instruction.lista.addError(new Error_("Sintactico error: "+s.value, "Sintactico"));
             Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error sintactico: "+s.value, "Sintactico", s.left, s.right));
     }
 	/*Method that is called when parser can't be recovered*/
 	public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
-            System.out.println("\u001B[31m"+"Error sintactico uncovered en la linea "+s.left+" columna "+s.right+" No se esperaba este componente: "+s.value+"\u001B[0m"); 
+            //System.out.println("\u001B[31m"+"Error sintactico uncovered en la linea "+s.left+" columna "+s.right+" No se esperaba este componente: "+s.value+"\u001B[0m"); 
             //Instruction.lista.addError(new Error_("Sintactico error: "+s.value, "Sintactico"));
             Proyecto1_Compi.Menu.listaErr.addError(new Error_("Error sintactico: "+s.value, "Sintactico", s.left, s.right));
     } 
@@ -73,7 +73,6 @@ inicio ::=
     |comentario
     |SALTODELINEA inicio
     |SALTODELINEA
-    | error LLAVERIGHT
 ;
 
 expresion ::= 
@@ -106,7 +105,7 @@ conjunto ::=
      CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR AZMINUS:b ONDULADO AZMINUS:c  {: String [] conjunto = {a, b, c}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); :}
     |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR AZMAYUS:b ONDULADO AZMAYUS:c  {: String [] conjunto = {a, b, c}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); :} 
     |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR NUMERO:b ONDULADO NUMERO:c  {: String [] conjunto = {a, b, c}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); :} 
-    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR NOTACIONCOMAS:b  {: String [] conjunto = {a, b}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); :} 
+    |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR NOTACIONCOMAS:b  {: String [] conjunto = {a, b, ""}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); :} 
     |CONJ DOSPUNTOS IDENTIFICADOR:a GUION MAYOR SIMBOLO:b ONDULADO SIMBOLO:c  {: String [] conjunto = {a, b, c}; Proyecto1_Compi.Menu.conjuntos.add(conjunto); :}
 ;
 
